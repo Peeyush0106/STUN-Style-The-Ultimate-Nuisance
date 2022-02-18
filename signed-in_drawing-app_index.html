@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STUN - Style The Ultimate Nuisance: Cloud Drawing</title>
+    <link rel="icon" href="Page logo.png">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <link rel="stylesheet" href="3d-button-styles.css" type="text/css">
+
+    <script src="p5.js"></script>
+    <script src="p5.play.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
+
+    <script>
+        firebase.initializeApp({
+            apiKey: "AIzaSyAo4wyl9NLZm2bMhLgvPEBjreP4CPFSDgU",
+            authDomain: "student-help-based-app.firebaseapp.com",
+            projectId: "student-help-based-app",
+            storageBucket: "student-help-based-app.appspot.com",
+            messagingSenderId: "480966391062",
+            appId: "1:480966391062:web:7565e7b3d30ade8e9bcc37"
+        });
+        var database = firebase.database();
+        var auth = firebase.auth();
+    </script>
+</head>
+
+<body>
+    <div id="body">
+        <div id="drawing-options" hidden="true">
+            <input type="button" class="drawing-app-nav-button" id="save-btn" value="Save Sketch"
+                onclick="saveDrawingToDatabase()">
+        </div>
+
+        <div id="drawing-app-opts">
+            <input type="button" class="drawing-app-nav-button" id="show-drawing-list" hidden="true"
+                value="Show my drawings">
+
+            <input type="button" class="drawing-app-nav-button" id="start-drawing-b-and-w" hidden="true"
+                value="Start Drawing in Black And White Mode">
+        </div>
+
+        <button id="home-btn" onclick="backToHome()">
+            <img src="home.png" alt="Exam Planner" width="30" height="30">
+        </button>
+
+        <div style="text-align:center;">
+            <img src="Loading.gif" draggable="false" id="loading" width="900">
+        </div>
+
+        <p id="no-drawings" hidden="true">
+            You don't have any drawings yet
+        </p>
+
+        <button id="back-btn" style="box-shadow: none" hidden="true" onclick="drawingHome()" hidden="true">
+            <img src="back-btn.png" width="40">
+        </button>
+    </div>
+
+    <script src="signed-in_drawing-app_auth.js"></script>
+    <script src="signed-in_drawing-app_sketch.js"></script>
+</body>
+
+</html>

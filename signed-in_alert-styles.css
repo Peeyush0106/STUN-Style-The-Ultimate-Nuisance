@@ -1,0 +1,20 @@
+.alert {
+    background-color: greenyellow;
+    color: black;
+    text-align: center;
+    opacity: 1;
+    transition: opacity 0.6s;
+}
+
+.closebtn {
+    color: black;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+}

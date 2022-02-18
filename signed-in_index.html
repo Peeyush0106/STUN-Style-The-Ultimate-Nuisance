@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STUN - Style The Ultimate Nuisance</title>
+    <link rel="icon" href="Page logo.png">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <link rel="stylesheet" href="3d-button-styles.css" type="text/css">
+
+    <script src="p5.js"></script>
+    <script src="p5.play.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
+
+    <script>
+        firebase.initializeApp({
+            apiKey: "AIzaSyAo4wyl9NLZm2bMhLgvPEBjreP4CPFSDgU",
+            authDomain: "student-help-based-app.firebaseapp.com",
+            projectId: "student-help-based-app",
+            storageBucket: "student-help-based-app.appspot.com",
+            messagingSenderId: "480966391062",
+            appId: "1:480966391062:web:7565e7b3d30ade8e9bcc37"
+        });
+        var database = firebase.database();
+        var auth = firebase.auth();
+    </script>
+</head>
+
+<body>
+    <div id="body">
+        <p id="current-form-info"></p>
+        <input type="button" id="logout-btn" value="Log Out" onclick="signOutMe()"
+            style="position: fixed; top: 10px; right: -15px;">
+
+        <h2 id="my-name"> </h2>
+
+        <div class="grid">
+            <button id="exam-planner-btn" class="nav-btn" onclick="examPlanning()">
+                <div class="opt">
+                    <img src="exam-planning.jpg" id="exam-planning" alt="Exam Planning">
+                    <br><br>
+                    Open Exam Planner
+                </div>
+            </button>
+            <button type="button" id="exam-marks-btn" class="nav-btn" onclick="examMarks(true)">
+                <div class="opt">
+                    <img src="marks-database.png" id="marks-database" alt="Exam Marks">
+                    <br><br>
+                    Open Exam Marks Database
+                </div>
+            </button>
+            <button type="button" id="secret-diary-btn" class="nav-btn" onclick="secretDiary()">
+                <div class="opt">
+                    <img src="secret.jpg" id="secret-img" alt="Secret Diary">
+                    <br><br>
+                    Open My Secret Diary
+                </div>
+            </button>
+            <button type="button" id="drawing-canvas-btn" class="nav-btn" onclick="drawingCanvas()">
+                <div class="opt">
+                    <img src="drawing-canvas.png" width="100%" style="border: 1px solid" id="drawing-canvas alt="
+                        Drawing Canvas">
+                    <br><br>
+                    Open My Drawing Canvas
+                </div>
+            </button>
+            <button type="button" id="squizzy-btn" class="nav-btn" disabled style="color: rgb(117, 114, 114)">
+                <div class="opt">
+                    Squizzy, a Quizzing App
+                    <br>
+                    <div style="font-size: 20px;">
+                        - In development
+                    </div>
+                </div>
+            </button>
+            <button type="button" id="housie-btn" class="nav-btn" disabled style="color: rgb(117, 114, 114)">
+                <div class="opt">
+                    Housie
+                    <br>
+                    <div style="font-size: 20px;">
+                        - In development
+                    </div>
+                </div>
+            </button>
+        </div>
+
+        <button id="home-btn" onclick="backToHome()">
+            <img src="home.png" alt="Exam Planner" width="30" height="30">
+        </button>
+
+        <div id="exam-marks-data">
+            <div id="marks-data-table-div"></div>
+            <div id="exam-marks-statistics"></div>
+        </div>
+        <div id="marks-div"></div>
+        <div id="view-plan-div" hidden>
+            <p>
+                Your plans:
+            </p>
+            <ul id="view-plan-ul">
+
+            </ul>
+        </div>
+    </div>
+
+    <script src="signed-in_loading.js"></script>
+    <script src="signed-in_ruleEngine.js"></script>
+    <script src="signed-in_sketch.js"></script>
+    <script src="signed-in_eventListeners.js"></script>
+    <script src="signed-in_createElements.js"></script>
+    <script src="signed-in_authentication.js"></script>
+
+    <script>
+        function signOutMe() {
+            auth.signOut().then(() => {
+                alert("You successfully signed out of your account!");
+                location.href = "redirector_index.html";
+            });
+        }
+    </script>
+</body>
+
+</html>

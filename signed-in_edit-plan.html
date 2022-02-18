@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STUN - Style The Ultimate Nuisance: Edit your plan</title>
+    <link rel="icon" href="Page logo.png">
+    <link rel="stylesheet" href="style.css" type="text/css">
+
+    <script src="p5.js"></script>
+    <script src="p5.play.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
+    <script>
+        firebase.initializeApp({
+            apiKey: "AIzaSyAo4wyl9NLZm2bMhLgvPEBjreP4CPFSDgU",
+            authDomain: "student-help-based-app.firebaseapp.com",
+            projectId: "student-help-based-app",
+            storageBucket: "student-help-based-app.appspot.com",
+            messagingSenderId: "480966391062",
+            appId: "1:480966391062:web:7565e7b3d30ade8e9bcc37"
+        });
+        var database = firebase.database();
+        var auth = firebase.auth();
+
+        function saveData() {
+            var dataSaved;
+            var fileName = prompt("Enter your file name");
+            database.ref("Users/" + auth.currentUser.uid + "plans/" + fileName).update({
+                subjects: choseSubjects
+            }).then(() => {
+                dataSaved = true;
+            });
+        }
+
+        window.onbeforeunload = function (e) {
+            if (!dataSaved) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        };
+    </script>
+</head>
+
+<body>
+    <table id="edit-plan">
+        <thead>
+            <th>
+                Subject
+            </th>
+            <th>
+                Dfficulty
+            </th>
+            <th>
+                No of chapters
+            </th>
+            <th>
+                Time for each chapter
+            </th>
+            <th>
+                Total No. of hours required
+            </th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    English
+                </td>
+                <td>
+                    Normal
+                </td>
+                <td>
+                    8
+                </td>
+                <td>
+                    4
+                </td>
+                <td>
+                    32
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    हिन्दी
+                </td>
+                <td>
+                    Difficult
+                </td>
+                <td>
+                    10
+                </td>
+                <td>
+                    4
+                </td>
+                <td>
+                    40
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button id="save-btn" onclick="saveData()">
+        <a href="signed-in_index.html">
+            <div class="link-text">
+                Save
+            </div>
+        </a>
+    </button>
+</body>
+
+</html>

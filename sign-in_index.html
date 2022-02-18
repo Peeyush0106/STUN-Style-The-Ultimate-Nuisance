@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STUN - Style The Ultimate Nuisance</title>
+    <link rel="icon" href="Page logo.png">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <link rel="stylesheet" href="3d-button-styles.css" type="text/css">
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
+    <script src="p5.js"></script>
+    <script src="p5.play.js"></script>
+    <script src="sign-in_loading.js"></script>
+    <script src="sign-in_cloud-functions.js"></script>
+    <script src="sign-in_authentication.js"></script>
+
+    <script>
+        firebase.initializeApp({
+            apiKey: "AIzaSyAo4wyl9NLZm2bMhLgvPEBjreP4CPFSDgU",
+            authDomain: "student-help-based-app.firebaseapp.com",
+            projectId: "student-help-based-app",
+            storageBucket: "student-help-based-app.appspot.com",
+            messagingSenderId: "480966391062",
+            appId: "1:480966391062:web:7565e7b3d30ade8e9bcc37"
+        });
+        var database = firebase.database();
+        var auth = firebase.auth();
+
+        setTimeout(function () {
+            document.body.style.transition = ".6s";
+            document.body.style.transform = "scale(1.2)";
+        }, 100);
+    </script>
+</head>
+
+<body>
+    <div width=" 100%">
+        <table width="100%" height="100%">
+            <tr height="15%">
+                <td colspan="2" style="border: none;">
+                    <div width="100%">
+                        <marquee id="marquee-txt">
+                            <h1 style="color: blue"> STUN - Style The Ultimate Nuisance!!!</h1>
+                        </marquee>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <p align="center">
+        Let's get started by creating your account
+    </p>
+    <button id="login" class="big-btn" onclick="loginUser()">
+        Login
+    </button>
+    <br>
+    <button id="signup" class="big-btn" onclick="signupUser()">
+        Sign Up
+    </button>
+    <br>
+
+    <form id="initial-form" hidden="true">
+        <!-- We have added this div as we are going to use it later, and the things applied to the form parent don't apply to the buttons, input boxes, etc. in it -->
+        <div id="initial-form-div">
+            <table cellpadding="2" cellspacing="4" align="center">
+                <div>
+                </div>
+                <tr style="display: flex; justify-content: space-evenly;" id="start-form-your-name">
+                    <td nowrap="nowrap" align="left" style="font-size: 25px; border: none;">
+                        <label for="inpt-name"> Your name: </label>
+                    </td>
+                    <td style="border: none;">
+                        <input type="text" id="inpt-name" placeholder="Enter your Name here" style="font-size: 25px;">
+                    </td>
+                </tr>
+                <tr style="display: flex; justify-content: space-evenly;" id="start-form-your-email">
+                    <td nowrap="nowrap" align="left" style="font-size: 25px; border: none;">
+                        <label for="inpt-eml"> Your email: </label>
+                    </td>
+                    <td style="border: none;">
+                        <input type="email" id="inpt-eml" placeholder="Enter your Email here" style="font-size: 25px;">
+                    </td>
+                </tr>
+                <tr style="display: flex; justify-content: space-evenly;" id="start-form-your-password">
+                    <td nowrap="nowrap" align="left" style="font-size: 25px; border: none;">
+                        <label for="inpt-pwd"> Your password: </label>
+                    </td>
+                    <td style="border: none;">
+                        <input type="password" id="inpt-pwd" placeholder="Enter your Password here"
+                            style="font-size: 25px;">
+                    </td>
+                </tr>
+            </table>
+
+            <div align="center">
+                <input type="submit" id="submit-start-btn" class="big-btn"
+                    style="font-size: 12.5px; width: 62.5px; height: 37.5px;">
+                <br>
+                <button id="cancel-sign-log" class="big-btn" onclick="cancelLoginOrSignup()"
+                    style="font-size: 12.5px; width: 62.5px; height: 37.5px;">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        document.getElementById("initial-form").addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            userName = document.getElementById("inpt-name").value;
+            email = document.getElementById("inpt-eml").value;
+            pwd = document.getElementById("inpt-pwd").value;
+
+            if (auth.currentUser) login = false;
+            if (validateEmail(email)[0] === email && pwd) {
+                if (!auth.currentUser) {
+                    if (userName && !login) {
+                        auth.createUserWithEmailAndPassword(email, pwd).then((data) => {
+                            database.ref("Users/" + auth.currentUser.uid).update({
+                                name: userName
+                            }).then(() => {
+                                location.href = "signed-in_index.html"
+                            });
+                        }).catch((error) => {
+                            alert(error.message)
+                        });
+                    }
+                    if (login) {
+                        auth.signInWithEmailAndPassword(email, pwd).then(() => {
+                            location.href = "signed-in_index.html";
+                            console.log("Success!");
+                        }).catch((error) => {
+                            alert(error.message)
+                        });
+                    }
+                }
+                if (!userName && !login && !signedIn) alert("Please enter a valid name.");
+            }
+            else if (!auth.currentUser) alert("Invalid email or password.");
+            console.log(auth.currentUser);
+        });
+    </script>
+</body>
+
+</html>

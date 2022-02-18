@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STUN - Style The Ultimate Nuisance: View your plan</title>
+    <link rel="icon" href="Page logo.png">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <link rel="stylesheet" href="signed-in_alert-styles.css" type="text/css">
+
+    <script src="p5.js"></script>
+    <script src="p5.play.js"></script>
+    <script src="signed-in_loading.js"></script>
+    <script src="signed-in-view-plan_authentication.js"></script>
+    <script src="signed-in_plotPlanData.js"></script>
+
+    <script src="signed-in_exportDataToCSV.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
+    <script>
+        firebase.initializeApp({
+            apiKey: "AIzaSyAo4wyl9NLZm2bMhLgvPEBjreP4CPFSDgU",
+            authDomain: "student-help-based-app.firebaseapp.com",
+            projectId: "student-help-based-app",
+            storageBucket: "student-help-based-app.appspot.com",
+            messagingSenderId: "480966391062",
+            appId: "1:480966391062:web:7565e7b3d30ade8e9bcc37"
+        });
+        var database = firebase.database();
+        var auth = firebase.auth();
+    </script>
+</head>
+
+<body>
+    <div id="body">
+        <div id="final-plan">
+        </div>
+        <br>
+
+        <button onclick="askExportFileOptions()" id="dnlad-btn" style="font-size: 30px;">
+            ⭳ Download Plan ⭳
+        </button>
+
+        <button id="home-btn" onclick="backToHome()" style="margin-top: 30%;">
+            <img src="home.png" alt="Exam Planner" width="30" height="30">
+        </button>
+    </div>
+
+</body>
+<script>
+    function askExportFileOptions() {
+        var fileName = prompt("Enter a name for your file.");
+        if (fileName === "") {
+            alert("Invalid name");
+            askExportFileOptions();
+        }
+        else if (fileName !== null) {
+            exportData('main-plan-table', fileName);
+            var succesDiv = document.createElement("div");
+            succesDiv.innerHTML = `
+                <br><br>
+                <div class="alert">
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                    File saved successfully
+                </div>
+            `;
+            document.getElementById("body").appendChild(succesDiv);
+        }
+    }
+    setTimeout(function () {
+        document.getElementById("body").style.transition = ".6s";
+        document.getElementById("body").style.transform = "scale(1.6)";
+    }, 100);
+
+    function backToHome() {
+        setTimeout(function () {
+            document.getElementById("body").style.transition = ".6s";
+            document.getElementById("body").style.transform = "scale(0.01)";
+            setTimeout(function () {
+                location.href = "signed-in_index.html";
+                setTimeout(function () {
+                    document.getElementById("body").style.transition = "1s";
+                    document.getElementById("body").style.transform = "scale(1.62)";
+                }, 500);
+            }, 600);
+        }, 100);
+    }
+</script>
+
+</html>
