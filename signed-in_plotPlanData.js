@@ -47,7 +47,7 @@ function plotPlanData(data) {
         `+ data.name + `
     </td>
     <td>
-        `+ data.difficultyLevel + `
+        `+ data.difficultyLevel + `/5
     </td>
     <td>
         `+ data.chapterCount + `
