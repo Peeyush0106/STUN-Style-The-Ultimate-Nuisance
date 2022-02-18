@@ -343,7 +343,7 @@ function createSubmitRatingBtn() {
 
 function askForWhenIsTheExam() {
     var info = document.createElement("p");
-    info.innerHTML = "Select the target date for completing the syllabus. Default is set to 3 weeks after. <br> Click on the calender icon to get a virtual calnder where you can choose a date.";
+    info.innerHTML = "Select the target date for completing the syllabus. Default is set to 3 weeks after.";
 
     var dateSelector = document.createElement("input");
     dateSelector.type = "date";
