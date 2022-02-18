@@ -53,13 +53,13 @@ function plotPlanData(data) {
         `+ data.chapterCount + `
     </td>
     <td>
-        `+ data.timePerChapter + `
+        `+ data.timePerChapter + ` hour(s)
     </td>
     <td>
-        `+ data.totalTime + `
+        `+ data.totalTime + ` hour(s)
     </td>
     <td>
-        `+ data.daysCount + `
+        `+ data.daysCount + ` day(s)
     </td>
     <td>
         `+ weekDays[parseInt(new Date(startDate).getDay())] + ", " + startDate + `

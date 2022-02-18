@@ -8,10 +8,6 @@ Hello !!!
 
 This is STUN - Style The Ultimate Nuisance.
 
-This app is a very basic prototype version until now.
-This just includes the must-haves.
-The newer version will come soon.
-
 The full-fledge version of this app includes a lot more features than this one.
 It will also include study related tools like Shared Canvas (for team work with friends), To-do manager (For task management), File Sharers (Sharing study files with a team), etc.
 
