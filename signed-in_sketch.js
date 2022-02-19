@@ -70,6 +70,8 @@ function examPlanning() {
                         location.href = "signed-in_view-plan.html?" + urlParams;
                     }
                     document.getElementById("view-plan-ul").appendChild(li);
+                    document.getElementById("view-plan-ul").appendChild(document.createElement("br"));
+                    document.getElementById("view-plan-ul").appendChild(document.createElement("br"));
                 }
                 document.getElementById("view-plan-div").hidden = false;
             });

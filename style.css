@@ -282,7 +282,7 @@ a .link-text {
     vertical-align: center;
 }
 
-.open-drawing-li {
+.open-drawing-li button {
     color: yellow;
     background-color: black;
     display: inline-block;
@@ -291,7 +291,7 @@ a .link-text {
     margin-left: 10%;
 }
 
-.open-drawing-li:hover {
+.open-drawing-li button:hover {
     color: lightgreen;
     background-color: red;
     cursor: pointer;
@@ -336,7 +336,7 @@ a .link-text {
     border: red solid;
 }
 
-.nav-btn{
+.nav-btn {
     border: none;
     box-shadow: none;
 }
@@ -351,7 +351,7 @@ a .link-text {
     text-transform: capitalize;
 }
 
-#view-plan-div{
+#view-plan-div {
     position: fixed;
     left: 70%;
 }
@@ -369,4 +369,19 @@ a .link-text {
     background-color: red;
     cursor: pointer;
     transform: scale(1.15);
+}
+
+#color-btns {
+    margin-left: 20%;
+}
+
+#color-btns button {
+    border-width: 3px;
+    box-shadow: none;
+    text-transform: capitalize;
+    font-size: 20px;
+}
+
+#delete-drawing-li {
+    margin-left: 10%;
 }

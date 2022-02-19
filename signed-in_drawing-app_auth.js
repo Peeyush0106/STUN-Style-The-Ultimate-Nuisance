@@ -1,6 +1,7 @@
 var animationStarted = false;
 var plottedMarksData = false;
 var firstTimeZoomedIn = false;
+var savingDrawing = false;
 
 /* We could also have used auth.onStateChanged, but that doesn't get called in disconnections
 */
@@ -15,7 +16,7 @@ function checkConnectionEverySecond() {
     var connectedRef = database.ref(".info/connected");
     connectedRef.on("value", function (snap) {
         if (snap.val()) {
-            loading.hidden = true;
+            if (!savingDrawing) loading.hidden = true;
             if (!firstTimeZoomedIn) {
                 document.getElementById("body").style.transition = ".6s";
                 document.getElementById("body").style.transform = "scale(1.62)";
@@ -24,7 +25,7 @@ function checkConnectionEverySecond() {
             if (auth.currentUser) {
                 connectionMade = true;
                 if (allData) {
-                    loading.hidden = true;
+                    if (!savingDrawing) loading.hidden = true;
                     bAndWDrawingBtn.hidden = _drawBAndWPressed;
                     showDrawingList.hidden = _drawBAndWPressed;
                 }
@@ -40,6 +41,9 @@ function checkConnectionEverySecond() {
             }
         }
         else if (!animationStarted && !snap.val()) {
+            loading.hidden = false;
+        }
+        if (savingDrawing) {
             loading.hidden = false;
         }
     });

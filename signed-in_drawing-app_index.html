@@ -37,6 +37,9 @@
         <div id="drawing-options" hidden="true">
             <input type="button" class="drawing-app-nav-button" id="save-btn" value="Save Sketch"
                 onclick="saveDrawingToDatabase()">
+            <div id="color-btns">
+                
+            </div>
         </div>
 
         <div id="drawing-app-opts">
@@ -47,7 +50,7 @@
                 value="Start Drawing in Black And White Mode">
         </div>
 
-        <button id="home-btn" onclick="backToHome()">
+        <button id="home-btn" onclick="backToHome()" style="margin-top: 30%;">
             <img src="home.png" alt="Exam Planner" width="30" height="30">
         </button>
 
@@ -66,6 +69,7 @@
 
     <script src="signed-in_drawing-app_auth.js"></script>
     <script src="signed-in_drawing-app_sketch.js"></script>
+    <script src="signed-in_drawing-app_cloud-functions.js"></script>
 </body>
 
 </html>

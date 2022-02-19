@@ -12,11 +12,13 @@ const drawingObjs = [];
 var allData;
 var readyToGo = false;
 var connectionMade = false;
+var currentColor = "black";
+var defineColorSelected = false;
 
 var loading;
 
 function setup() {
-    canvas = createCanvas(window.innerWidth * 1000 / 1440, window.innerHeight * 1000 / 1440);
+    canvas = createCanvas(window.innerWidth * 1500 / 1440, window.innerHeight * 1500 / 1440);
     background("white");
     canvas.canvas.hidden = true;
     canvas.mousePressed(startPath);
@@ -29,6 +31,86 @@ function setup() {
     drawingObjs.push(canvas.canvas);
     drawingObjs.push(drawingOpts);
     toggleHidingDrawObjs(true);
+}
+
+var bg_colors = [
+    "black",
+    "red",
+    "green",
+    "blue",
+    "yellow",
+    "magenta",
+    "cyan"
+];
+var txt_colors = [
+    "white",
+    "white",
+    "white",
+    "white",
+    "black",
+    "white",
+    "black"
+];
+
+function addColorBtns() {
+    for (var i = 0; i < bg_colors.length; i++) {
+        var div = document.createElement("span");
+        div.innerHTML = `
+            <button
+                id="color-btn-` + bg_colors[i] + `"
+                onclick=switchColor("` + i + `")
+            >`
+            + bg_colors[i] + `
+            </button>
+        `;
+        document.getElementById("color-btns").appendChild(div);
+        document.getElementById("color-btn-" + bg_colors[i]).style.backgroundColor = bg_colors[i];
+        document.getElementById("color-btn-" + bg_colors[i]).style.color = txt_colors[i];
+        document.getElementById("color-btn-" + bg_colors[i]).style.transition = "1s";
+    }
+    document.getElementById("color-btn-black").style.transform = "scale(1.2)";
+    var div = document.createElement("span");
+    div.innerHTML = `
+        <input
+            type="color"
+            id="define-color"
+        />
+    `;
+    document.getElementById("color-btns").appendChild(div);
+    document.getElementById("define-color").addEventListener("change", function (e) {
+        e.preventDefault();
+        if (defineColorSelected) {
+            currentColor = document.getElementById("define-color").value;
+        }
+    });
+    document.getElementById("define-color").addEventListener("click", function () {
+        switchColor("define");
+        for (var i = 0; i < bg_colors.length; i++) {
+            document.getElementById("color-btn-" + bg_colors[i]).style.transform = "scale(1)";
+        }
+        document.getElementById("define-color").style.transform = "scale(1.2)";
+        defineColorSelected = true;
+        currentColor = document.getElementById("define-color").value;
+    });
+}
+
+function switchColor(colorIndex) {
+    if (colorIndex === "define") {
+        for (var i = 0; i < bg_colors.length; i++) {
+            document.getElementById("color-btn-" + bg_colors[i]).style.transform = "scale(1)";
+        }
+        document.getElementById("define-color").style.transform = "scale(1.2)";
+        defineColorSelected = true;
+    }
+    else if (colorIndex) {
+        defineColorSelected = false;
+        currentColor = bg_colors[colorIndex];
+        document.getElementById("define-color").style.transform = "scale(1)";
+        for (var i = 0; i < bg_colors.length; i++) {
+            document.getElementById("color-btn-" + bg_colors[i]).style.transform = "scale(1)";
+        }
+        document.getElementById("color-btn-" + currentColor).style.transform = "scale(1.2)";
+    }
 }
 
 function toggleHidingDrawObjs(hiding) {
@@ -47,25 +129,27 @@ function draw() {
         background("white");
         push();
         noFill();
-        stroke("black");
         strokeWeight(5);
+        stroke("black");
         rect(10, 10, canvas.width - 10, canvas.height - 10);
         pop();
         if (mouseIsPressed) {
             var point = {
                 x: mouseX,
-                y: mouseY
+                y: mouseY,
+                drawingColor: currentColor
             }
             currentPath.push(point);
             drawing.push(currentPath);
         }
-        stroke("black");
         strokeWeight(4);
         noFill();
         for (var i = 0; i < drawing.length; i++) {
             var path = drawing[i];
             beginShape();
             for (var j = 0; j < path.length; j++) {
+                var strokeColor = path[j].drawingColor ? path[j].drawingColor : "black";
+                stroke(strokeColor);
                 vertex(path[j].x, path[j].y);
             }
             endShape();
@@ -85,46 +169,6 @@ function draw() {
     }
 }
 
-function saveDrawingToDatabase() {
-    var overlapping = true;
-    var overlappingMsgClosed = false;
-    var cancel = false;
-    if (drawing[0]) {
-        if (!drawingName) {
-            drawingName = prompt("Please Enter a Name for your Drawing");
-            if (drawingName === "") {
-                saveDrawingToDatabase();
-                cancel = true;
-            }
-            else if (!drawingName) {
-                overlapping = false;
-                cancel = true;
-            }
-            else if (!cancel) {
-                for (var i in allSavedDrawingNames) {
-                    if (allSavedDrawingNames[i] === drawingName && !overlappingMsgClosed) {
-                        overlapping = confirm("You already have a drawing saved with this file name. Do you want to overlap that drawing? Press 'Ok' to Overlap, and Cancel and to Save it with a different name");
-                        overlappingMsgClosed = true;
-                        if (!overlapping) {
-                            saveDrawingToDatabase();
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        if (overlapping && !cancel) {
-            database.ref("Users/" + auth.currentUser.uid + "/Drawings/Saved Drawings/" + drawingName).update({
-                drawingData: drawing,
-                drawingName: drawingName
-            });
-        }
-    }
-    else {
-        alert("Please make a drawing to save. We can't save a blank drawing..");
-    }
-}
-
 document.getElementById("start-drawing-b-and-w").addEventListener("click", () => {
     drawing = [];
     drawingName = "";
@@ -139,10 +183,12 @@ document.getElementById("start-drawing-b-and-w").addEventListener("click", () =>
     if (document.getElementById("all-drawings-list")) {
         document.getElementById("all-drawings-list").parentElement.removeChild(document.getElementById("all-drawings-list"));
     }
+    addColorBtns();
 });
 
 document.getElementById("show-drawing-list").addEventListener("click", () => {
     drawingName = "";
+    document.getElementById("color-btns").innerHTML = "";
     if (allData["Drawings"]) {
         if (document.getElementById("all-drawings-list")) {
             document.getElementById("all-drawings-list").parentElement.removeChild(document.getElementById("all-drawings-list"));
@@ -152,26 +198,57 @@ document.getElementById("show-drawing-list").addEventListener("click", () => {
         ul.id = "all-drawings-list";
         canvas.canvas.hidden = true;
         backBtn.hidden = false;
-
-        for (const i in allData["Drawings"]["Saved Drawings"]) {
-            const drawing = allData["Drawings"]["Saved Drawings"][i];
-            var li = document.createElement("li");
-            li.id = "open-drawing-li-" + drawing.drawingName;
-            li.className = "open-drawing-li";
-            var a = document.createElement("a");
-            a.innerText = drawing.drawingName;
-            a.onclick = function (e) {
-                e.preventDefault();
-                openDrawing(drawing.drawingName);
-            }
-            li.appendChild(a);
-            ul.appendChild(li);
-        }
+        createShowDrawingList(ul);
     }
     else {
         document.getElementById("no-drawings").hidden = false;
     }
 });
+
+function createShowDrawingList(ul) {
+    if (allData["Drawings"]) {
+        ul.innerHTML = "";
+        for (const i in allData["Drawings"]["Saved Drawings"]) {
+            const drawing = allData["Drawings"]["Saved Drawings"][i];
+            var li = document.createElement("li");
+            li.id = "open-drawing-li-" + drawing.drawingName;
+            li.className = "open-drawing-li";
+            var liBtn = document.createElement("button");
+            liBtn.innerText = drawing.drawingName;
+            liBtn.onclick = function (e) {
+                e.preventDefault();
+                openDrawing(drawing.drawingName);
+            }
+            var deleteBtn = document.createElement("button");
+            deleteBtn.innerText = "Delete";
+            deleteBtn.className = "delete-drawing-li";
+            deleteBtn.onclick = function (e) {
+                e.preventDefault();
+                if (confirm("Are you sure you want to delete this drawing?")) {
+                    var ref = database.ref("Users/" + auth.currentUser.uid + "/Drawings/Saved Drawings/" + drawing.drawingName);
+                    ref.remove();
+                    ref.once("value", function () {
+                        setTimeout(function () {
+                            document.getElementById("body").style.transition = ".6s";
+                            document.getElementById("body").style.transform = "scale(0.01)";
+                            setTimeout(function () {
+                                location.reload();
+                                setTimeout(function () {
+                                    document.getElementById("body").style.transition = "1s";
+                                    document.getElementById("body").style.transform = "scale(1.62)";
+                                }, 500);
+                            }, 600);
+                        }, 100);
+                    });
+                }
+            }
+            li.appendChild(liBtn);
+            li.appendChild(deleteBtn);
+            li.appendChild(document.createElement("br"));
+            ul.appendChild(li);
+        }
+    }
+}
 
 window.onbeforeunload = function () {
     serialNo = 1;
@@ -189,113 +266,4 @@ window.onbeforeunload = function () {
             });
         */
     }
-}
-
-function getAllDrawings() {
-    allDrawings = allData["Drawings"];
-
-    if (allDrawings) {
-        allSavedDrawings = allDrawings["Saved Drawings"];
-        allUnsavedDrawings = allDrawings["Unsaved Drawings"];
-
-        allSavedDrawingNames = [];
-        allUnsavedDrawingNames = [];
-
-        if (allSavedDrawings) {
-            for (var i in allSavedDrawings) {
-                allSavedDrawingNames.push(allSavedDrawings[i].drawingName);
-            }
-        }
-
-        if (allUnsavedDrawings) {
-            for (var i in allUnsavedDrawings) {
-                allUnsavedDrawingNames.push(allUnsavedDrawings[i].drawingName);
-            }
-        }
-    }
-}
-
-function openDrawing(name) {
-    canvas.canvas.hidden = false;
-    clear();
-    drawing = allData["Drawings"]["Saved Drawings"][name].drawingData;
-    stroke("black");
-    strokeWeight(4);
-    noFill();
-    for (var i = 0; i < drawing.length; i++) {
-        var path = drawing[i];
-        beginShape();
-        for (var j = 0; j < path.length; j++) {
-            vertex(path[j].x, path[j].y);
-        }
-        endShape();
-    }
-}
-
-function drawingHome() {
-    if (_drawBAndWPressed) {
-        if (
-            drawing[0]
-            &&
-            (
-                (
-                    allData["Drawings"]
-                    &&
-                    allData["Drawings"]["Saved Drawings"]
-                    &&
-                    allData["Drawings"]["Saved Drawings"][drawingName] !== drawing
-                )
-                ||
-                (
-                    !allData["Drawings"]["Saved Drawings"]
-                    ||
-                    !allData["Drawings"]["Saved Drawings"][drawingName]
-                )
-            )
-        ) {
-            if (confirm("Do you want to save changes to your drawing before leaving?")) {
-                saveDrawingToDatabase();
-                drawing = [];
-            }
-        }
-        setTimeout(function () {
-            document.getElementById("body").style.transition = ".6s";
-            document.getElementById("body").style.transform = "scale(0.01)";
-            setTimeout(function () {
-                _drawBAndWPressed = false;
-                backBtn.hidden = true;
-                canvas.canvas.hidden = true;
-                saveBtn.hidden = true;
-                bAndWDrawingBtn.hidden = false;
-                showDrawingList.hidden = false;
-                drawingName = "";
-                setTimeout(function () {
-                    document.getElementById("body").style.transition = "1s";
-                    document.getElementById("body").style.transform = "scale(1.62)";
-                }, 500);
-            }, 600);
-        }, 100);
-    }
-    else if (document.getElementById("no-drawings")) {
-        document.getElementById("no-drawings").hidden = true;
-    }
-
-    if (document.getElementById("all-drawings-list")) {
-        backBtn.hidden = true;
-        document.getElementById("all-drawings-list").parentElement.removeChild(document.getElementById("all-drawings-list"));
-    }
-}
-
-function backToHome(){
-    setTimeout(function () {
-        document.getElementById("body").style.transition = ".6s";
-        document.getElementById("body").style.transform = "scale(0.01)";
-        setTimeout(function () {
-            location.href = "signed-in_index.html";
-            setTimeout(function () {
-                document.getElementById("body").style.transition = "1s";
-                document.getElementById("body").style.transform = "scale(1.62)";
-            }, 500);
-        }, 600);
-    }, 100);
 }
