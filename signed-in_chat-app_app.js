@@ -26,6 +26,7 @@ var cancelledOpenContactCard = true;
 var mouseOnContactCard = false;
 var mouseOverEventsAdded = true;
 var userName = "";
+var joinedChat = false;
 var statusCodes = {
     "busy": "rgb(255, 0, 0)",
     "dnd": "rgb(255, 0, 0)",
@@ -134,7 +135,7 @@ auth.onAuthStateChanged(() => {
                         refreshStatus();
                     }
                 }, 50);
-                document.getElementById("meet-btn").hidden = false;
+                if (joinedChat) document.getElementById("meet-btn").hidden = false;
             }
             else {
                 fileUpload.style.display = "none";
@@ -277,7 +278,7 @@ function refreshMsgSet() {
         });
     }
     if (noOfPlots === msgNo - 1 && noOfPlots !== 0 && msgNo !== 0) {
-        if (!uploadingFile) document.getElementById("messages").hidden = false;
+        if (!uploadingFile && joinedChat) document.getElementById("messages").hidden = false;
         if (firstMsgPlot) {
             window.scrollTo(0, document.documentElement.scrollHeight);
             firstMsgPlot = false;
@@ -419,6 +420,7 @@ function checkConnection() {
                 });
                 database.ref("Users/" + auth.currentUser.uid + "/Chat/joined").get().then((data) => {
                     if (!data.exists() || !data.val()) {
+                        joinedChat = data.val();
                         document.getElementById("profile-pic-btn").hidden = true;
                         document.getElementById("status-change-btn").hidden = true;
                         document.getElementById("pin-form").hidden = false;
@@ -435,6 +437,7 @@ function checkConnection() {
                             }
                         }
                         document.getElementById("messages").hidden = true;
+                        document.getElementById("meet-btn").hidden = true;
                         document.getElementById("messages").innerHTML = "";
                         document.getElementById("msg-box").hidden = true;
                         document.getElementById("send-btn").hidden = true;
