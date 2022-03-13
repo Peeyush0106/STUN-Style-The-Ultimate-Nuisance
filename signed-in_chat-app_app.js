@@ -419,8 +419,8 @@ function checkConnection() {
                     }
                 });
                 database.ref("Users/" + auth.currentUser.uid + "/Chat/joined").get().then((data) => {
+                    joinedChat = data.val();
                     if (!data.exists() || !data.val()) {
-                        joinedChat = data.val();
                         document.getElementById("profile-pic-btn").hidden = true;
                         document.getElementById("status-change-btn").hidden = true;
                         document.getElementById("pin-form").hidden = false;
