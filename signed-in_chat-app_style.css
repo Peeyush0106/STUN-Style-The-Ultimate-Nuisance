@@ -1,0 +1,318 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    color: black;
+    font-family: comic sans ms;
+    background: linear-gradient(to right, #ff0000, #ffff00,
+            #00ff00, #00ffff, #0000ff, #ff00ff);
+}
+
+#imgFileUpload, #meet-btn {
+    transition: .3s;
+}
+
+#imgFileUpload:hover, #meet-btn:hover {
+    transform: scale(1.2);
+}
+
+::selection {
+    color: red;
+    background: yellow;
+}
+
+canvas {
+    display: block;
+    border: 0px;
+}
+
+.button {
+    width: 300px;
+    height: 100px;
+    color: white;
+    font-size: 40px;
+    border: none
+}
+
+.info {
+    color: #ffff00;
+    background-color: black;
+    font-size: x-large;
+}
+
+#drop-file-txt {
+    visibility: hidden;
+}
+
+.attach {
+    position: fixed;
+    margin-left: 10%;
+    bottom: 0;
+}
+
+#open-chat {
+    position: fixed;
+    top: 80px;
+    margin-left: 50%;
+}
+
+button:hover, input:hover, img:hover {
+    cursor: pointer;
+}
+
+#uploaded-img-txt-img {
+    border: solid yellow;
+}
+
+#upload-btn {
+    transition: 2s;
+    background-color: transparent;
+    border: none;
+    width: 80px;
+    position: fixed;
+    top: 80px;
+    left: 250px;
+}
+
+#upload-btn:hover {
+    cursor: pointer;
+    background-color: red;
+}
+
+#cncl-btn {
+    transition: 2s;
+    background-color: transparent;
+    border: none;
+    width: 80px;
+    position: fixed;
+    top: 70px;
+    left: 350px;
+}
+
+#cncl-btn:hover {
+    cursor: pointer;
+    background-color: red;
+}
+
+.alert {
+    background-color: greenyellow;
+    color: black;
+    text-align: center;
+    opacity: 1;
+    transition: opacity 0.6s;
+}
+
+.closebtn {
+    color: black;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+}
+
+#msg-box {
+    width: 77.5%;
+    margin-left: 5%;
+    position: fixed;
+    bottom: 10%;
+    resize: none;
+    border-radius: 40px;
+    padding: 10px;
+}
+
+#no-msg-info {
+    text-align: center;
+    color: red;
+    font-size: 20px;
+}
+
+#helloBtn {
+    color: blue;
+    background-color: chartreuse;
+    font-size: x-large;
+    box-shadow: darkgray;
+}
+
+#send-btn:active {
+    background-color: yellowgreen;
+    border: solid red;
+    border-radius: 50%;
+    border-style: dashed;
+    border-width: 5px;
+}
+
+#send-btn:hover {
+    background-color: #ff00f2;
+    border: solid #5a5f51;
+    border-radius: 50%;
+    border-style: dashed;
+    border-width: 5px;
+    transform: scale(0.5);
+}
+
+.msg {
+    font-size: 2px;
+    color: black;
+    border-radius: 5%;
+    display: inline-table;
+    font-size: x-large;
+    padding: 7px 10px;
+    transition: 2s;
+    margin-right: 10%;
+    margin-left: 35%;
+}
+
+.msg:hover {
+    transform: scale(1.02);
+    color: red;
+}
+
+::placeholder {
+    color: black;
+    font-weight: 15px;
+}
+
+.profileImgMsg {
+    width: 50;
+    border-radius: 50%;
+    border: solid 1px;
+}
+
+#meet-btn {
+    position: fixed;
+    margin-left: 20%;
+    bottom: 0;
+}
+
+#imgFileUpload, #meet-btn {
+    transition: 1.2s;
+    background-color: yellow;
+    border: solid blue;
+    border-radius: 50%;
+    border-style: dashed;
+    border-width: 5px;
+}
+
+#pin-form {
+    zoom: 4;
+    margin-top: 10%;
+    text-align: center;
+}
+
+#profile-pic-btn {
+    background: none;
+    border: none;
+    position: fixed;
+}
+
+#status-change-btn {
+    position: fixed;
+    top: 100px;
+    left: 50px;
+    z-index: 1000000;
+    border: 1px solid black;
+    border-radius: 50%
+}
+
+#profile-pic-btn img {
+    border-radius: 50%;
+    border: solid 1px;
+}
+
+#contact-card {
+    background: linear-gradient(to right, #ffff00, #00ff00, #00ffff);
+    padding-left: 0.5%;
+    padding-right: 0.5%;
+    text-align: center;
+    max-width: 30%;
+    position: fixed;
+    right: 10%;
+    display: inline-block;
+    opacity: 0;
+    transition: 1s;
+    overflow-wrap: break-word;
+}
+
+#contact-card-status {
+    text-transform: capitalize;
+}
+
+#status-opt {
+    background-color: white;
+    padding-left: 0.5%;
+    padding-right: 0.5%;
+    text-align: center;
+    max-width: 30%;
+    position: fixed;
+    left: 10%;
+    transition: 1s;
+    opacity: 0;
+    transition: 1s;
+    overflow-wrap: break-word;
+}
+
+#contact-card-close:hover {
+    transition: 1s;
+    background-color: red;
+    cursor: pointer;
+}
+
+#contact-card-close {
+    zoom: 1.2;
+    display: inline-block;
+}
+
+#contact-card-img {
+    border-radius: 50%;
+    border: solid 1px;
+}
+
+#uploaded-img-elts {
+    /* display: inline-block; */
+    text-align: center;
+}
+
+#uploaded-img-elts div {
+    display: inline-block;
+}
+
+input[type="radio"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    padding: 3px;
+    border: 1px solid #bbbbbb;
+    border-radius: 50%;
+}
+
+#busy {
+    background-color: #ff0000;
+}
+
+#dnd {
+    background-color: #ff0000;
+    border: solid 2.5px blue;
+}
+
+#dnd:checked {
+    border: solid 4px black;
+}
+
+#away {
+    background-color: #ffd000;
+}
+
+#avail {
+    background-color: #00ff00;
+}
+
+input[type="radio"]:checked {
+    border: solid 4px;
+}

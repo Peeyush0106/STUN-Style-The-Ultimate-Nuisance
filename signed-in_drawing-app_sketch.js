@@ -1,8 +1,8 @@
 var drawing = [];
 var currentPath;
-var saveBtn, drawingOpts, bAndWDrawingBtn, showDrawingList, backBtn;
+var saveBtn, drawingOpts, drawingBtn, showDrawingList, backBtn;
 var drawingObjsHidden = true;
-var _drawBAndWPressed = false;
+var drawBtnPressed = false;
 var _openDrawingPressed = false;
 var drawingName;
 var allDrawings, allSavedDrawings, allUnsavedDrawings;
@@ -24,7 +24,7 @@ function setup() {
     canvas.mousePressed(startPath);
     saveBtn = document.getElementById("save-btn");
     drawingOpts = document.getElementById("drawing-options");
-    bAndWDrawingBtn = document.getElementById("start-drawing-b-and-w");
+    drawingBtn = document.getElementById("start-drawing");
     showDrawingList = document.getElementById("show-drawing-list");
     backBtn = document.getElementById("back-btn");
     loading = document.getElementById("loading");
@@ -125,7 +125,7 @@ function startPath() {
 }
 
 function draw() {
-    if (_drawBAndWPressed) {
+    if (drawBtnPressed) {
         background("white");
         push();
         noFill();
@@ -165,15 +165,15 @@ function draw() {
         });
     }
     else {
-        bAndWDrawingBtn.hidden = true;
+        drawingBtn.hidden = true;
     }
 }
 
-document.getElementById("start-drawing-b-and-w").addEventListener("click", () => {
+document.getElementById("start-drawing").addEventListener("click", () => {
     drawing = [];
     drawingName = "";
     clear();
-    _drawBAndWPressed = true;
+    drawBtnPressed = true;
     backBtn.hidden = false;
     canvas.canvas.hidden = false;
     saveBtn.hidden = false;

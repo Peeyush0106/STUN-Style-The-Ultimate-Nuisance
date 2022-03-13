@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<head>
+	<title>ProChat</title>
+	<meta charset="utf-8">
+
+	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-messaging.js"></script>
+	<script>
+		// Your web app's Firebase configuration
+		const firebaseConfig = {
+			apiKey: "AIzaSyAo4wyl9NLZm2bMhLgvPEBjreP4CPFSDgU",
+			authDomain: "student-help-based-app.firebaseapp.com",
+			projectId: "student-help-based-app",
+			storageBucket: "student-help-based-app.appspot.com",
+			messagingSenderId: "480966391062",
+			appId: "1:480966391062:web:7565e7b3d30ade8e9bcc37"
+		};
+		// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
+	</script>
+	<script src="signed-in_chat-app_p5.js"></script>
+	<script src="signed-in_chat-app_p5.play.js"></script>
+	<script src="signed-in_chat-app_loading.js"></script>
+</head>
+
+<body>
+	<a href="https://meet.google.com/new" target="_blank" id="meet"></a>
+	<a href="" id="to-scroll-elt"></a>
+	<div id="pin-form" hidden>
+		<h1 style="background-color: yellow; color: green;">
+			Enter chat pin
+		</h1>
+		<input type="text" id="pin-inpt">
+		<input type="submit" id="submit-pin">
+	</div>
+	<link rel="stylesheet" type="text/css" href="signed-in_chat-app_style.css">
+
+	<p id="drop-file-txt"> Drop your file here </p>
+
+	<span id="spnFilePath" style="background-color: yellow; color: black;">
+	</span>
+	<form id="file-upload-form">
+		<input type="file" id="file-upload" style="display: none" multiple />
+	</form>
+
+	<textarea type="text" placeholder="Type your message..." name="Chat message" id="msg-box"
+		onkeypress="sendMessage(event, false)" maxlength="5000"></textarea>
+	<button id="send-btn" onclick="sendMessage(event, true)" title="Send Message">
+		<img src="signed-in_chat-app_send-edited.png" width=55 alt="Send Button Image">
+	</button>
+	<button id="profile-pic-btn" onclick="location.href = 'signed-in_change-profile-pic_index.html'"
+		title="Edit Profile" hidden>
+		<img width=55 id="profile-pic" alt="Edit Profile">
+	</button>
+	<button id="status-change-btn" class="status-change-btns" onclick="showStatusOpt()" hidden>
+		|
+	</button>
+	<img src="signed-in_chat-app_attachment.png" width=65 draggable="false" class="attach" id="imgFileUpload"
+		value="Select File" alt="Attach File">
+
+	<img src="https://seeklogo.net/wp-content/uploads/2020/11/google-meet-logo.png" width=65 draggable="false" onclick="startMeet()" hidden
+		id="meet-btn" value="Start Meeting" alt="Start Meeting">
+
+	<div id="uploaded-img-elts" hidden="true">
+		<div id="uploaded-img-txt-img" hidden="true">
+			<img id="uploaded-img" width="200px" />
+		</div>
+		<button id="upload-btn">
+			<img src='signed-in_chat-app_upload-btn.png' width="100%" />
+			<p>
+				Share
+			</p>
+		</button>
+
+		<button id="cncl-btn">
+			<img src='signed-in_chat-app_delete.png' width="100%" />
+			<p>
+				Cancel Upload
+			</p>
+		</button>
+	</div>
+
+	<div id="contact-card">
+		<img src="signed-in_change-profile-pic_blank-profile-pic.jpg" id="contact-card-img" width="100">
+		<h3 id="contact-card-status"></h3>
+		<h1 id="contact-card-name">
+			loading..
+		</h1>
+		<h4 id="contact-card-email">
+			loading..
+		</h4>
+		<h5>
+			<span>
+				Status message:
+			</span>
+			<span id="contact-card-status-msg">
+				loading..
+			</span>
+		</h5>
+		<h5 id="contact-card-close">
+			<span style="zoom: 2;">&times;</span> (Close)
+		</h5>
+	</div>
+	<div id="status-opt">
+		<table style="text-align: left;">
+			<tbody>
+				<tr>
+					<td>
+						<label for="#busy">Busy</label>
+					</td>
+					<td>
+						<input type="radio" id="busy" name="status-btn" class="status-radio" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="#dnd">Do Not Disturb</label>
+					</td>
+					<td>
+						<input type="radio" id="dnd" name="status-btn" class="status-radio" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="#away">Away</label>
+					</td>
+					<td>
+						<input type="radio" id="away" name="status-btn" class="status-radio" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="#avail">Available</label>
+					</td>
+					<td>
+						<input type="radio" id="avail" name="status-btn" class="status-radio" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div id="messages"></div>
+	<br><br><br><br><br><br><br><br><br><br>
+
+	<script src="signed-in_chat-app_app.js"></script>
+	<script src="signed-in_chat-app_notify.js"></script>
+</body>

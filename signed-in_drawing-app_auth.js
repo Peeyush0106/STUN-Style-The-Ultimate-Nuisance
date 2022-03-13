@@ -26,18 +26,18 @@ function checkConnectionEverySecond() {
                 connectionMade = true;
                 if (allData) {
                     if (!savingDrawing) loading.hidden = true;
-                    bAndWDrawingBtn.hidden = _drawBAndWPressed;
-                    showDrawingList.hidden = _drawBAndWPressed;
+                    drawingBtn.hidden = drawBtnPressed;
+                    showDrawingList.hidden = drawBtnPressed;
                 }
                 else {
                     loading.hidden = false;
-                    bAndWDrawingBtn.hidden = true;
+                    drawingBtn.hidden = true;
                     showDrawingList.hidden = true;
                 }
             }
             else {
                 alert("Redirect");
-                // location.href = "index.html";
+                location.href = "index.html";
             }
         }
         else if (!animationStarted && !snap.val()) {

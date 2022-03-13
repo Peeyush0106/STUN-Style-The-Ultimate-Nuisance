@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>STUN - Style The Ultimate Nuisance: Change Profile Pic</title>
+    <link rel="icon" href="Page logo.png">
+    <!-- <link rel="stylesheet" href="style.css" type="text/css"> -->
+    <link rel="stylesheet" type="text/css" href="signed-in_change-profile-pic_style.css">
+    <link rel="stylesheet" href="signed-in_3d-button-styles.css" type="text/css">
+
+    <script src="p5.js"></script>
+    <script src="p5.play.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
+
+    <script>
+        firebase.initializeApp({
+            apiKey: "AIzaSyAo4wyl9NLZm2bMhLgvPEBjreP4CPFSDgU",
+            authDomain: "student-help-based-app.firebaseapp.com",
+            projectId: "student-help-based-app",
+            storageBucket: "student-help-based-app.appspot.com",
+            messagingSenderId: "480966391062",
+            appId: "1:480966391062:web:7565e7b3d30ade8e9bcc37"
+        });
+        var database = firebase.database();
+        var auth = firebase.auth();
+    </script>
+</head>
+
+<body>
+    <div id="body">
+        <h1 style="text-align: center; background-color: yellow;">
+            Hello User! Here you can update your profile, so that your friends, are in the know of your activities.
+        </h1>
+        <button style="background: none; border: none; box-shadow: none;" onclick="backToChat()">
+            <img src="back-btn.png" width=50 />
+        </button>
+        <div id="camera-elts" hidden="true">
+            <div id="my_camera"></div>
+            <input type="button" value="Take Photo and Apply Profile Picture" onClick="takeSnapshot()">
+            <input type="button" value="Cancel" onClick="cancelSnapshot()">
+            <div id="results"></div>
+            <script src="signed-in_chat-app_webcamjs/webcam.min.js"></script>
+        </div>
+
+        <div id="nav-btns">
+            <input type="button" value="Change Name" onclick="nameChange()" /><br>
+            <input type="button" value="Change Profile Pic" onclick="picChange()" /><br>
+            <input type="button" value="Change Status Message" onclick="statusChange()" />
+        </div>
+
+        <div id="change-profile-pic-elts" hidden>
+            <p align="center" id="info" hidden>
+                You can change your profile pic here
+            </p>
+            <br>
+            <div id="uploaded-img-elts" hidden="true">
+                <div id="uploaded-img-txt-img" hidden="true">
+                    <img id="uploaded-img" />
+                    <p> Your Image </p>
+                </div>
+            </div>
+            <div id="profile-pic-elts">
+                <center>
+                    <img src="signed-in_change-profile-pic_blank-profile-pic.jpg" id="profile-pic" class="profile-image" alt="Profile Picture">
+                    <div id="alert-info" hidden="true">
+                        <strong>Info!</strong> Please wait until your photo uploads
+                    </div>
+                    <div>
+                        <button id="capture-photo-btn">
+                            <img src="signed-in_change-profile-pic_capture.jpg" id="capture-photo" alt="capture" onclick="setCam()" title="Capture"
+                                width="100%">
+                        </button>
+                        <button id="attach-photo-btn" alt="attach" title="Attach">
+                            <img src="signed-in_change-profile-pic_attachment.png" width="100%" id="imgFileUpload" value="Select File">
+                            <form id="file-upload-form">
+                                <input type="file" id="file-upload" accept="image/*" style="display: none" />
+                            </form>
+                        </button>
+                        <br><br>
+                        <button id="saveBtn" onclick="chooseProfilePic()">
+                            Save
+                        </button>
+                        <button id="cancelBtn" onclick="cancelProfilePic()">
+                            Cancel
+                        </button>
+                    </div>
+                </center>
+            </div>
+        </div>
+        <div id="name-change-elts" hidden>
+            <h1 id="chosen-name">loading..</h1>
+            <input type="button" onclick="saveName()" value="Save Name" />
+            <input type="button" onclick="cancelName()" value="Cancel" />
+        </div>
+        <div id="status-message-elts" hidden>
+            <h5 style="background-color: yellow;">
+                <span>
+                    Current status message: 
+                </span>
+                <span id="current-msg" style="color: blue;">
+                    <br>
+                    loading..
+                </span>
+            </h5>
+            <textarea id="status-area" rows="5" cols="50" placeholder="Enter message.." maxlength="500"></textarea>
+            <br>
+            <input type="button" onclick="saveStatus()" value="Save Message" />
+            <input type="button" onclick="cancelStatus()" value="Cancel" />
+        </div>
+    </div>
+    <script src="signed-in_change-profile-pic_loading.js"></script>
+    <script src="signed-in_change-profile-pic_sketch.js"></script>
+</body>
+
+</html>

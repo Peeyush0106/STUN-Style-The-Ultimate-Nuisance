@@ -87,7 +87,7 @@ function openDrawing(name) {
 
 function drawingHome() {
     document.getElementById("color-btns").innerHTML = "";
-    if (_drawBAndWPressed) {
+    if (drawBtnPressed) {
         if (
             drawing[0]
             &&
@@ -118,11 +118,11 @@ function drawingHome() {
             document.getElementById("body").style.transition = ".6s";
             document.getElementById("body").style.transform = "scale(0.01)";
             setTimeout(function () {
-                _drawBAndWPressed = false;
+                drawBtnPressed = false;
                 backBtn.hidden = true;
                 canvas.canvas.hidden = true;
                 saveBtn.hidden = true;
-                bAndWDrawingBtn.hidden = false;
+                drawingBtn.hidden = false;
                 showDrawingList.hidden = false;
                 drawingName = "";
                 setTimeout(function () {
@@ -154,4 +154,8 @@ function backToHome() {
             }, 500);
         }, 600);
     }, 100);
+}
+
+function shareDrawing() {
+    
 }

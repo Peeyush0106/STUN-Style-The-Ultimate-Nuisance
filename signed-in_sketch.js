@@ -82,6 +82,8 @@ function examPlanning() {
             document.getElementById("drawing-canvas-btn").hidden = true;
             document.getElementById("squizzy-btn").hidden = true;
             document.getElementById("housie-btn").hidden = true;
+            document.getElementById("word-game-btn").hidden = true;
+            document.getElementById("my-tasks-btn").hidden = true;
             setTimeout(function () {
                 document.getElementById("body").style.transition = "1s";
                 document.getElementById("body").style.transform = "scale(1.62)";
@@ -107,6 +109,8 @@ function examMarks(onlineReferenceRequired) {
             document.getElementById("drawing-canvas-btn").hidden = true;
             document.getElementById("squizzy-btn").hidden = true;
             document.getElementById("housie-btn").hidden = true;
+            document.getElementById("word-game-btn").hidden = true;
+            document.getElementById("my-tasks-btn").hidden = true;
             if (onlineReferenceRequired) {
                 database.ref("Users/" + auth.currentUser.uid + "/Marks Database/gotStarted").get().then((data) => {
                     if (data.exists() && data.val() == true) {
@@ -145,6 +149,48 @@ function drawingCanvas() {
         document.getElementById("body").style.transform = "scale(0.01)";
         setTimeout(function () {
             location.href = "signed-in_drawing-app_index.html";
+            setTimeout(function () {
+                document.getElementById("body").style.transition = "1s";
+                document.getElementById("body").style.transform = "scale(1.62)";
+            }, 500);
+        }, 600);
+    }, 100);
+}
+
+function wordGame() {
+    setTimeout(function () {
+        document.getElementById("body").style.transition = ".6s";
+        document.getElementById("body").style.transform = "scale(0.01)";
+        setTimeout(function () {
+            location.href = "signed-in_word-game_index.html";
+            setTimeout(function () {
+                document.getElementById("body").style.transition = "1s";
+                document.getElementById("body").style.transform = "scale(1.62)";
+            }, 500);
+        }, 600);
+    }, 100);
+}
+
+function toDo() {
+    setTimeout(function () {
+        document.getElementById("body").style.transition = ".6s";
+        document.getElementById("body").style.transform = "scale(0.01)";
+        setTimeout(function () {
+            location.href = "signed-in_to-do-app_index.html";
+            setTimeout(function () {
+                document.getElementById("body").style.transition = "1s";
+                document.getElementById("body").style.transform = "scale(1.62)";
+            }, 500);
+        }, 600);
+    }, 100);
+}
+
+function classChat() {
+    setTimeout(function () {
+        document.getElementById("body").style.transition = ".6s";
+        document.getElementById("body").style.transform = "scale(0.01)";
+        setTimeout(function () {
+            location.href = "signed-in_chat-app_index.html";
             setTimeout(function () {
                 document.getElementById("body").style.transition = "1s";
                 document.getElementById("body").style.transform = "scale(1.62)";
