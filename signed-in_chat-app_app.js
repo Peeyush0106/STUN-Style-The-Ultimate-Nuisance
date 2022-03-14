@@ -27,6 +27,7 @@ var mouseOnContactCard = false;
 var mouseOverEventsAdded = true;
 var userName = "";
 var joinedChat = false;
+var noMsg = true;
 var statusCodes = {
     "busy": "rgb(255, 0, 0)",
     "dnd": "rgb(255, 0, 0)",
@@ -37,6 +38,11 @@ var statusCodes = {
 var profileListenersAdded = false;
 
 cancelledUpload = false;
+
+document.getElementById("msg-box").hidden = true;
+document.getElementById("send-btn").hidden = true;
+document.getElementById("imgFileUpload").hidden = true;
+document.getElementById("meet-btn").hidden = true;
 
 fileUpload = document.getElementById("file-upload");
 filePath = document.getElementById("spnFilePath");
@@ -187,6 +193,7 @@ function refreshMsgSet() {
                 msgData = allMsgData.val();
                 for (const j in msgData) {
                     const msg = msgData[j];
+                    noMsg = false;
                     const oldMsg = prevMsgData[j];
                     if (JSON.stringify(msg) !== JSON.stringify(oldMsg)) {
                         prevMsgData[j] = msg;
@@ -293,6 +300,11 @@ function refreshMsgSet() {
             addContactCardListener(k, msgSenderId);
         }
     }
+    document.getElementById("msg-box").hidden = noMsg;
+    document.getElementById("send-btn").hidden = noMsg;
+    var fileUploadDisplay = noMsg ? "none" : "block";
+    document.getElementById("imgFileUpload").style.display = fileUploadDisplay;
+    document.getElementById("meet-btn").hidden = noMsg;
 }
 
 function addContactCardListener(k, msgSenderId) {
