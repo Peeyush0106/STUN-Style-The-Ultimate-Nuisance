@@ -97,7 +97,6 @@ async function uploadMessage(i, noOfMsg) {
                 window.scrollTo(0, document.documentElement.scrollHeight);
                 i++;
                 noOfMsg++;
-                console.log(i, fileUpload.files);
                 if (i !== fileUpload.files.length) uploadMessage(i, noOfMsg);
                 else loading_show = false;
                 window.scrollTo(0, document.documentElement.scrollHeight);
@@ -172,7 +171,6 @@ function getUserProfile(id, functionToCall) {
     });
 }
 
-var noOfPlots = 0;
 var msgNo = 0;
 var msgSenderIds = [];
 
@@ -190,17 +188,14 @@ function refreshMsgSet() {
                 for (const j in msgData) {
                     const msg = msgData[j];
                     const oldMsg = prevMsgData[j];
-                    console.log(msg, oldMsg);
                     if (JSON.stringify(msg) !== JSON.stringify(oldMsg)) {
                         prevMsgData[j] = msg;
-                        console.log(prevMsgData);
                         var message;
                         getUserProfile(msg.sentById, (msgSenderName, msgSenderPic) => {
                             var msgSenderId = msg.sentById;
                             if (msgSenderName.length > 15) msgSenderName = msgSenderName.slice(0, 15) + " ...";
 
                             if (msg.fileURL && msg.fileName) {
-                                noOfPlots++;
                                 getNoOfMessages(function () {
                                     msgSenderIds.push(msgSenderId);
                                     var fileName, fileURL;
@@ -235,10 +230,13 @@ function refreshMsgSet() {
 
                                     message.style.backgroundColor = msgSenderId === auth.currentUser.uid ? "wheat" : "skyblue";
                                     // message.style.marginLeft = msgSenderId === auth.currentUser.uid ? "50%" : "25%";
+                                    console.log(window.scrollY > document.documentElement.scrollHeight - 1000);
+                                    if (msgSenderId === auth.currentUser.uid || window.scrollY > document.documentElement.scrollHeight - 1000) {
+                                        window.scrollTo(0, document.documentElement.scrollHeight);
+                                    }
                                 });
                             }
                             else if (msg.msg) {
-                                noOfPlots++;
                                 getNoOfMessages(function () {
                                     msgSenderIds.push(msgSenderId);
                                     var msgTxt = msg.msg;
@@ -265,6 +263,10 @@ function refreshMsgSet() {
 
                                     message.style.backgroundColor = msgSenderId === auth.currentUser.uid ? "wheat" : "skyblue";
                                     // message.style.marginLeft = msgSenderId === auth.currentUser.uid ? "50%" : "25%";
+                                    console.log(window.scrollY > document.documentElement.scrollHeight - 1000);
+                                    if (msgSenderId === auth.currentUser.uid || window.scrollY > document.documentElement.scrollHeight - 1000) {
+                                        window.scrollTo(0, document.documentElement.scrollHeight);
+                                    }
                                 });
                             }
                             if (parseInt(j) === msgData.length) for (var i = 0; i < 10; i++) document.getElementById("messages").appendChild(document.createElement("br"));
@@ -277,14 +279,15 @@ function refreshMsgSet() {
             }
         });
     }
-    if (noOfPlots === msgNo - 1 && noOfPlots !== 0 && msgNo !== 0) {
+    var noOfMsgsPlot = document.getElementById("messages").getElementsByClassName("msg").length;
+    if (noOfMsgsPlot === msgNo - 1 && noOfMsgsPlot !== 0 && msgNo !== 0) {
         if (!uploadingFile && joinedChat) document.getElementById("messages").hidden = false;
         if (firstMsgPlot) {
             window.scrollTo(0, document.documentElement.scrollHeight);
             firstMsgPlot = false;
         }
     }
-    for (var k = 1; k < noOfPlots + 1; k++) {
+    for (var k = 1; k < noOfMsgsPlot + 1; k++) {
         var msgSenderId = msgSenderIds[k - 1];
         if (document.getElementById("msgProfileImg" + k)) {
             addContactCardListener(k, msgSenderId);
@@ -295,7 +298,6 @@ function refreshMsgSet() {
 function addContactCardListener(k, msgSenderId) {
     document.getElementById("msgProfileImg" + k).onmouseover = function () {
         openContactCard(msgSenderId);
-        console.log(msgSenderId);
         cancelledOpenContactCard = false;
     };
     document.getElementById("contact-card-close").addEventListener("click", () => {
@@ -562,25 +564,28 @@ function showStatusOpt() {
     }
 }
 
-function startMeet() {
-    notifyMe(function () {
-        document.getElementById("meet").click();
-        var meetingLink = prompt("Copy link from Google Meet and enter it here");
-        if (meetingLink && meetingLink !== "" && meetingLink.slice(0, 24) === "https://meet.google.com/") {
-            console.log("send")
-            document.getElementById("msg-box").value =
-                "Hello, I am inviting you to join this meeting: <a href='" + meetingLink + "' target='_blank'> Meeting link (" + meetingLink.slice(24, 100) + ")</a>"
-                ;
-            getNoOfMessages(function (noOfMsg) {
-                msgNo = noOfMsg + 1;
-                addMessage(document.getElementById("msg-box").value, msgNo);
-            });
-            if (document.getElementById("no-msg-info")) document.getElementById("no-msg-info").innerHTML = "";
-        }
-        else if (meetingLink === "") {
-            startMeet();
-        }
-    });
+function startMeet(openMeet) {
+    var oldTitle = document.title;
+    document.title = "URGENT! Please open this tab";
+    if (openMeet) document.getElementById("meet").click();
+    var meetingLink = prompt("Copy link from Google Meet and enter it here");
+    if (meetingLink && meetingLink !== "" && meetingLink.slice(0, 24) === "https://meet.google.com/") {
+        document.getElementById("msg-box").value =
+            "Hello, I am inviting you to join this meeting: <a href='" + meetingLink + "' target='_blank'> Meeting link (" + meetingLink.slice(24, 100) + ")</a>"
+            ;
+        document.title = oldTitle;
+        getNoOfMessages(function (noOfMsg) {
+            msgNo = noOfMsg + 1;
+            addMessage(document.getElementById("msg-box").value, msgNo);
+        });
+        if (document.getElementById("no-msg-info")) document.getElementById("no-msg-info").innerHTML = "";
+    }
+    else if (meetingLink === "") {
+        startMeet(false);
+    }
+    else {
+        document.title = oldTitle;
+    }
 }
 
 function refreshStatus() {
