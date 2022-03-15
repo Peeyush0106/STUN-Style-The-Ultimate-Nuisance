@@ -213,16 +213,20 @@ function refreshMsgSet() {
 									if (msg.time) {
 										var encodedTime = new Date(msg.time);
 										const months = ["Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
+										
 										var currentDate = months[new Date().getMonth()] + " " + new Date().getDate() + ", " + new Date().getFullYear();
-
+										
 										yesterdayDate = new Date(new Date().setDate(new Date().getDate() - 1));
 										yesterdayDate = months[yesterdayDate.getMonth()] + " " + yesterdayDate.getDate() + ", " + yesterdayDate.getFullYear()
-
+										
 										decidedDate = months[encodedTime.getMonth()] + " " + encodedTime.getDate() + ", " + encodedTime.getFullYear();
 
+										var hours = encodedTime.getHours().toString().slice(0, 2) == encodedTime.getHours().toString().slice(0, 1) ? "0" + encodedTime.getHours().toString().slice(0, 1) : encodedTime.getHours().toString().slice(0, 2)
+
+										var minutes = encodedTime.getMinutes().toString().slice(0, 2) == encodedTime.getMinutes().toString().slice(0, 1) ? "0" + encodedTime.getMinutes().toString().slice(0, 1) : encodedTime.getMinutes().toString().slice(0, 2)
+
 										date = decidedDate === currentDate ? "Today" : decidedDate === yesterdayDate ? "Yesterday" : decidedDate;
-										var time = date + ", " + encodedTime.getHours() + ":" + encodedTime.getMinutes()
+										var time = date + ", " + hours + ":" + minutes;
 									}
 									msgSenderIds.push(msgSenderId);
 
@@ -280,16 +284,20 @@ function refreshMsgSet() {
 									if (msg.time) {
 										var encodedTime = new Date(msg.time);
 										const months = ["Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
+										
 										var currentDate = months[new Date().getMonth()] + " " + new Date().getDate() + ", " + new Date().getFullYear();
-
+										
 										yesterdayDate = new Date(new Date().setDate(new Date().getDate() - 1));
 										yesterdayDate = months[yesterdayDate.getMonth()] + " " + yesterdayDate.getDate() + ", " + yesterdayDate.getFullYear()
-
+										
 										decidedDate = months[encodedTime.getMonth()] + " " + encodedTime.getDate() + ", " + encodedTime.getFullYear();
 
+										var hours = encodedTime.getHours().toString().slice(0, 2) == encodedTime.getHours().toString().slice(0, 1) ? "0" + encodedTime.getHours().toString().slice(0, 1) : encodedTime.getHours().toString().slice(0, 2)
+
+										var minutes = encodedTime.getMinutes().toString().slice(0, 2) == encodedTime.getMinutes().toString().slice(0, 1) ? "0" + encodedTime.getMinutes().toString().slice(0, 1) : encodedTime.getMinutes().toString().slice(0, 2)
+
 										date = decidedDate === currentDate ? "Today" : decidedDate === yesterdayDate ? "Yesterday" : decidedDate;
-										var time = date + ", " + encodedTime.getHours() + ":" + encodedTime.getMinutes()
+										var time = date + ", " + hours + ":" + minutes;
 									}
 									msgSenderIds.push(msgSenderId);
 									var msgTxt = msg.msg;
@@ -355,7 +363,7 @@ function refreshMsgSet() {
 		cancelledOpenContactCard = true;
 		document.getElementById("contact-card").style.opacity = 0;
 	});
-	
+
 	document.getElementById("msg-box").hidden = noMsg;
 	document.getElementById("send-btn").hidden = noMsg;
 	var fileUploadDisplay = noMsg ? "none" : "block";
