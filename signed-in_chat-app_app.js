@@ -132,6 +132,11 @@ auth.onAuthStateChanged(() => {
         connectingP.innerText = "Authenticating user.."
         document.body.appendChild(connectingP);
         connectingPAdded = true;
+        if (auth.currentUser) {
+            database.ref("Users/" + auth.currentUser.uid + "/userData").update({
+                status: "avail"
+            });
+        }
         setTimeout(() => {
             if (auth.currentUser) {
                 setInterval(function () {
@@ -161,7 +166,8 @@ function addMessage(addedMsg, msgNo) {
     document.getElementById("msg-box").value = "";
     database.ref("messages/" + msgNo).update({
         msg: addedMsg,
-        sentById: auth.currentUser.uid
+        sentById: auth.currentUser.uid,
+        time: new Date()
     }).then(() => {
         refreshMsgSet();
     });
@@ -204,6 +210,22 @@ function refreshMsgSet() {
 
                             if (msg.fileURL && msg.fileName) {
                                 getNoOfMessages(function () {
+                                    if (msg.time) {
+                                        var encodedTime = new Date(msg.time);
+                                        const months = ["Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+                                        var currentDate = months[new Date().getMonth()] + " " + new Date().getDate() + ", " + new Date().getFullYear();
+
+                                        yesterdayDate = new Date(new Date().setDate(new Date().getDate() - 1));
+                                        yesterdayDate = months[yesterdayDate.getMonth()] + " " + yesterdayDate.getDate() + ", " + yesterdayDate.getFullYear()
+
+                                        decidedDate = months[encodedTime.getMonth()] + " " + encodedTime.getDate() + ", " + encodedTime.getFullYear();
+                                        
+                                        date = decidedDate === currentDate ? "Today" : decidedDate === yesterdayDate ? "Yesterday" : decidedDate;
+                                        var time = date + ", " + encodedTime.getHours() + ":" + encodedTime.getMinutes()
+                                    }
+                                    msgSenderIds.push(msgSenderId);
+
                                     msgSenderIds.push(msgSenderId);
                                     var fileName, fileURL;
                                     if (msg.fileName.length > 15) {
@@ -215,6 +237,10 @@ function refreshMsgSet() {
                                     message = document.createElement("div");
                                     a = document.createElement("a");
                                     img = document.createElement("img");
+                                    timeP = document.createElement("p");
+
+                                    timeP.innerText = time ? time : "--";
+                                    timeP.style.fontSize = "50%";
 
                                     img.src = msgSenderPic;
                                     img.className = "profileImgMsg";
@@ -230,6 +256,7 @@ function refreshMsgSet() {
                                     message.className = "msg";
 
                                     message.appendChild(a);
+                                    message.appendChild(timeP);
 
                                     document.getElementById("messages").appendChild(message);
                                     document.getElementById("messages").appendChild(document.createElement("br"));
@@ -237,7 +264,6 @@ function refreshMsgSet() {
 
                                     message.style.backgroundColor = msgSenderId === auth.currentUser.uid ? "wheat" : "skyblue";
                                     // message.style.marginLeft = msgSenderId === auth.currentUser.uid ? "50%" : "25%";
-                                    console.log(window.scrollY > document.documentElement.scrollHeight - 1000);
                                     if (msgSenderId === auth.currentUser.uid || window.scrollY > document.documentElement.scrollHeight - 1000) {
                                         window.scrollTo(0, document.documentElement.scrollHeight);
                                     }
@@ -245,12 +271,30 @@ function refreshMsgSet() {
                             }
                             else if (msg.msg) {
                                 getNoOfMessages(function () {
+                                    if (msg.time) {
+                                        var encodedTime = new Date(msg.time);
+                                        const months = ["Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+                                        var currentDate = months[new Date().getMonth()] + " " + new Date().getDate() + ", " + new Date().getFullYear();
+
+                                        yesterdayDate = new Date(new Date().setDate(new Date().getDate() - 1));
+                                        yesterdayDate = months[yesterdayDate.getMonth()] + " " + yesterdayDate.getDate() + ", " + yesterdayDate.getFullYear()
+
+                                        decidedDate = months[encodedTime.getMonth()] + " " + encodedTime.getDate() + ", " + encodedTime.getFullYear();
+                                        
+                                        date = decidedDate === currentDate ? "Today" : decidedDate === yesterdayDate ? "Yesterday" : decidedDate;
+                                        var time = date + ", " + encodedTime.getHours() + ":" + encodedTime.getMinutes()
+                                    }
                                     msgSenderIds.push(msgSenderId);
                                     var msgTxt = msg.msg;
 
                                     message = document.createElement("div");
                                     p = document.createElement("p");
                                     img = document.createElement("img");
+                                    timeP = document.createElement("p");
+
+                                    timeP.innerText = time ? time : "--";
+                                    timeP.style.fontSize = "50%";
 
                                     img.src = msgSenderPic;
                                     img.className = "profileImgMsg";
@@ -264,13 +308,13 @@ function refreshMsgSet() {
                                     message.className = "msg";
 
                                     message.appendChild(p);
+                                    message.appendChild(timeP);
                                     document.getElementById("messages").appendChild(message);
                                     document.getElementById("messages").appendChild(document.createElement("br"));
                                     document.getElementById("messages").appendChild(document.createElement("br"));
 
                                     message.style.backgroundColor = msgSenderId === auth.currentUser.uid ? "wheat" : "skyblue";
                                     // message.style.marginLeft = msgSenderId === auth.currentUser.uid ? "50%" : "25%";
-                                    console.log(window.scrollY > document.documentElement.scrollHeight - 1000);
                                     if (msgSenderId === auth.currentUser.uid || window.scrollY > document.documentElement.scrollHeight - 1000) {
                                         window.scrollTo(0, document.documentElement.scrollHeight);
                                     }
@@ -294,10 +338,7 @@ function refreshMsgSet() {
             firstMsgPlot = false;
         }
     }
-    for (var k = 1; k < noOfMsgsPlot + 1; k++) {
-        var msgSenderId = msgSenderIds[k - 1];
-        addContactCardListener(k, msgSenderId);
-    }
+    addContactCardListener();
     document.getElementById("msg-box").hidden = noMsg;
     document.getElementById("send-btn").hidden = noMsg;
     var fileUploadDisplay = noMsg ? "none" : "block";
@@ -305,19 +346,23 @@ function refreshMsgSet() {
     document.getElementById("meet-btn").hidden = noMsg;
 }
 
-function addContactCardListener(k, msgSenderId) {
-    if (document.getElementById("msgProfileImg" + k)) {
-        document.getElementById("msgProfileImg" + k).addEventListener("mouseover", function () {
-            console.log(msgSenderId);
-            openContactCard(msgSenderId);
-            cancelledOpenContactCard = false;
+function addContactCardListener() {
+    for (var k = 1; k < msgSenderIds.length + 1; k++) {
+        var msgSenderId = msgSenderIds[k - 1];
+        console.log(msgSenderId, k)
+        if (document.getElementById("msgProfileImg" + k)) {
+            document.getElementById("msgProfileImg" + k).addEventListener("mouseover", function () {
+                console.log(k, msgSenderId);
+                openContactCard(msgSenderId);
+                cancelledOpenContactCard = false;
+            });
+        }
+    
+        document.getElementById("contact-card-close").addEventListener("click", () => {
+            cancelledOpenContactCard = true;
+            document.getElementById("contact-card").style.opacity = 0;
         });
     }
-
-    document.getElementById("contact-card-close").addEventListener("click", () => {
-        cancelledOpenContactCard = true;
-        document.getElementById("contact-card").style.opacity = 0;
-    });
 }
 
 function openContactCard(msgSenderId) {
@@ -346,6 +391,14 @@ function openContactCard(msgSenderId) {
             }
         }
     });
+}
+
+window.onbeforeunload = function () {
+    if (auth.currentUser) {
+        database.ref("Users/" + auth.currentUser.uid + "/userData").update({
+            status: "offline"
+        });
+    }
 }
 
 function showHelloGif() {
@@ -391,11 +444,6 @@ fileUpload.onchange = function () {
     }
 }
 
-document.getElementById("uploaded-img").onload = function () {
-    if (document.getElementById("uploaded-img").width < 100) document.getElementById("uploaded-img").width = 100;
-    if (document.getElementById("uploaded-img").width > window.screen.availWidth) document.getElementById("uploaded-img").width = window.screen.availWidth - 100;
-};
-
 checkConnection();
 function checkConnection() {
     setTimeout(function () {
@@ -404,63 +452,80 @@ function checkConnection() {
         connectedRef.on("value", function (snap) {
             connected = snap.val();
             if (connected) {
-                database.ref("Users/" + auth.currentUser.uid + "/userData/profilePicURL").get().then((picData) => {
-                    if (picData.exists() && picData.val()) {
-                        var pic = picData.val() === "blank" ? "signed-in_chat-app_blank-profile-pic.jpg" : picData.val();
-                        document.getElementById("profile-pic").src = pic;
-                        document.getElementById("profile-pic-btn").hidden = false;
-                        document.getElementById("status-change-btn").hidden = false;
-                    }
-                    else {
-                        database.ref("Users/" + auth.currentUser.uid + "/userData").update({
-                            profilePicURL: "blank"
-                        });
-                    }
-                });
-                database.ref("Users/" + auth.currentUser.uid + "/userData/email").get().then((emailData) => {
-                    if (!emailData.exists() || !emailData.val()) {
-                        database.ref("Users/" + auth.currentUser.uid + "/userData").update({
-                            email: auth.currentUser.email
-                        });
-                    }
-                });
-                database.ref("Users/" + auth.currentUser.uid + "/name").get().then((nameData) => {
-                    if (nameData.exists() && nameData.val()) {
-                        userName = nameData.val();
-                        database.ref("Users/" + auth.currentUser.uid + "/userData").update({
-                            name: nameData.val()
-                        }).then(() => {
-                            database.ref("Users/" + auth.currentUser.uid + "/name").remove();
-                        });
-                    }
-                });
-                database.ref("Users/" + auth.currentUser.uid + "/Chat/joined").get().then((data) => {
-                    joinedChat = data.val();
-                    if (!data.exists() || !data.val()) {
-                        document.getElementById("profile-pic-btn").hidden = true;
-                        document.getElementById("status-change-btn").hidden = true;
-                        document.getElementById("pin-form").hidden = false;
-                        document.getElementById("submit-pin").onclick = function () {
-                            if (document.getElementById("pin-inpt").value.toLowerCase() === "debug") {
-                                database.ref("Users/" + auth.currentUser.uid + "/Chat").update({
-                                    joined: true
-                                }).then(() => {
-                                    location.reload();
-                                });
-                            }
-                            else {
-                                alert("Incorrect pin!");
-                            }
+                if (auth.currentUser) {
+                    database.ref("Users/" + auth.currentUser.uid + "/userData/profilePicURL").get().then((picData) => {
+                        if (picData.exists() && picData.val()) {
+                            var pic = picData.val() === "blank" ? "signed-in_chat-app_blank-profile-pic.jpg" : picData.val();
+                            document.getElementById("profile-pic").src = pic;
+                            document.getElementById("profile-pic-btn").hidden = false;
+                            document.getElementById("status-change-btn").hidden = false;
                         }
-                        document.getElementById("messages").hidden = true;
-                        document.getElementById("meet-btn").hidden = true;
-                        document.getElementById("messages").innerHTML = "";
-                        document.getElementById("msg-box").hidden = true;
-                        document.getElementById("send-btn").hidden = true;
-                        if (document.getElementById("no-msg-info")) document.getElementById("no-msg-info").hidden = true;
-                        document.getElementById("imgFileUpload").style.display = "none";
-                    }
-                });
+                        else {
+                            database.ref("Users/" + auth.currentUser.uid + "/userData").update({
+                                profilePicURL: "blank"
+                            });
+                        }
+                    });
+                    database.ref("joiners").get().then((joinData) => {
+                        if (!joinData.exists() || !joinData.val()) {
+                            var noOfJoiners = 1;
+                            for (const i in joinData.val()) {
+                                noOfJoiners++;
+                            }
+                            role = auth.currentUser.uid === "HJRcga7pVSQHoNElCwrZjDogk0G2" ? "admin" : "member"
+                            database.ref("joiners/" + noOfJoiners).update({
+                                user: {
+                                    id: auth.currentUser.uid,
+                                    role: role
+                                }
+                            });
+                        }
+                    });
+                    database.ref("Users/" + auth.currentUser.uid + "/userData/email").get().then((emailData) => {
+                        if (!emailData.exists() || !emailData.val()) {
+                            database.ref("Users/" + auth.currentUser.uid + "/userData").update({
+                                email: auth.currentUser.email
+                            });
+                        }
+                    });
+                    database.ref("Users/" + auth.currentUser.uid + "/name").get().then((nameData) => {
+                        if (nameData.exists() && nameData.val()) {
+                            userName = nameData.val();
+                            database.ref("Users/" + auth.currentUser.uid + "/userData").update({
+                                name: nameData.val()
+                            }).then(() => {
+                                database.ref("Users/" + auth.currentUser.uid + "/name").remove();
+                            });
+                        }
+                    });
+                    database.ref("Users/" + auth.currentUser.uid + "/Chat/joined").get().then((data) => {
+                        joinedChat = data.val();
+                        if (!data.exists() || !data.val()) {
+                            document.getElementById("profile-pic-btn").hidden = true;
+                            document.getElementById("status-change-btn").hidden = true;
+                            document.getElementById("pin-form").hidden = false;
+                            document.getElementById("submit-pin").onclick = function () {
+                                if (document.getElementById("pin-inpt").value.toLowerCase() === "debug") {
+                                    database.ref("Users/" + auth.currentUser.uid + "/Chat").update({
+                                        joined: true
+                                    }).then(() => {
+                                        location.reload();
+                                    });
+                                }
+                                else {
+                                    alert("Incorrect pin!");
+                                }
+                            }
+                            document.getElementById("messages").hidden = true;
+                            document.getElementById("meet-btn").hidden = true;
+                            document.getElementById("messages").innerHTML = "";
+                            document.getElementById("msg-box").hidden = true;
+                            document.getElementById("send-btn").hidden = true;
+                            if (document.getElementById("no-msg-info")) document.getElementById("no-msg-info").hidden = true;
+                            document.getElementById("imgFileUpload").style.display = "none";
+                        }
+                    });
+                }
                 noConnectionTimer = 0;
                 if (!fileAboutToUploadState) {
                     uploadLocallyBtn.hidden = false;
@@ -548,6 +613,8 @@ window.onload = function () {
         }
     `;
     document.body.appendChild(styling);
+    if (document.getElementById("uploaded-img").width < 100) document.getElementById("uploaded-img").width = 100;
+    if (document.getElementById("uploaded-img").width > window.screen.availWidth) document.getElementById("uploaded-img").width = window.screen.availWidth - 100;
 }
 
 function showStatusOpt() {

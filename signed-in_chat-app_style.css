@@ -313,6 +313,10 @@ input[type="radio"] {
     background-color: #00ff00;
 }
 
+#off {
+    background-color: gray;
+}
+
 input[type="radio"]:checked {
     border: solid 4px;
 }
