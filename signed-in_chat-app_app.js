@@ -219,7 +219,7 @@ function refreshMsgSet() {
                                     img.src = msgSenderPic;
                                     img.className = "profileImgMsg";
                                     img.width = 50;
-                                    img.id = "msgProfileImg" + msgNo;
+                                    img.id = "msgProfileImg" + j;
 
                                     a.href = fileURL;
                                     a.innerHTML = "<br> Open file: " + fileName;
@@ -255,7 +255,7 @@ function refreshMsgSet() {
                                     img.src = msgSenderPic;
                                     img.className = "profileImgMsg";
                                     img.width = 50;
-                                    img.id = "msgProfileImg" + msgNo;
+                                    img.id = "msgProfileImg" + j;
 
                                     p.innerHTML = msgTxt;
 
@@ -296,18 +296,7 @@ function refreshMsgSet() {
     }
     for (var k = 1; k < noOfMsgsPlot + 1; k++) {
         var msgSenderId = msgSenderIds[k - 1];
-        if (document.getElementById("messages").getElementsByClassName("profileImgMsg")) {
-            document.getElementById("messages").getElementsByClassName("profileImgMsg")[k - 1].addEventListener("mouseover", function () {
-                console.log(msgSenderIds[k - 1])
-                openContactCard(msgSenderIds[k - 1]);
-                cancelledOpenContactCard = false;
-            });
-
-            document.getElementById("contact-card-close").addEventListener("click", () => {
-                cancelledOpenContactCard = true;
-                document.getElementById("contact-card").style.opacity = 0;
-            });
-        }
+        addContactCardListener(k, msgSenderId);
     }
     document.getElementById("msg-box").hidden = noMsg;
     document.getElementById("send-btn").hidden = noMsg;
@@ -317,7 +306,18 @@ function refreshMsgSet() {
 }
 
 function addContactCardListener(k, msgSenderId) {
+    if (document.getElementById("msgProfileImg" + k)) {
+        document.getElementById("msgProfileImg" + k).addEventListener("mouseover", function () {
+            console.log(msgSenderId);
+            openContactCard(msgSenderId);
+            cancelledOpenContactCard = false;
+        });
+    }
 
+    document.getElementById("contact-card-close").addEventListener("click", () => {
+        cancelledOpenContactCard = true;
+        document.getElementById("contact-card").style.opacity = 0;
+    });
 }
 
 function openContactCard(msgSenderId) {
@@ -329,7 +329,7 @@ function openContactCard(msgSenderId) {
                 document.getElementById("contact-card-email").innerText = email;
                 document.getElementById("contact-card-img").src = pic;
                 document.getElementById("contact-card-status-msg").innerText = statusMsg;
-                document.getElementById("contact-card-status").innerText = status;
+                document.getElementById("contact-card-status").innerText = status ? status : "<i>No Message</i>";
                 if (!cancelledOpenContactCard) {
                     document.getElementById("contact-card").style.opacity = 1;
                 }
