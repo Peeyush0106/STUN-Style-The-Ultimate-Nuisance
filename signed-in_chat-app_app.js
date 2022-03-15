@@ -296,8 +296,17 @@ function refreshMsgSet() {
     }
     for (var k = 1; k < noOfMsgsPlot + 1; k++) {
         var msgSenderId = msgSenderIds[k - 1];
-        if (document.getElementById("msgProfileImg" + k)) {
-            addContactCardListener(k, msgSenderId);
+        if (document.getElementById("messages").getElementsByClassName("profileImgMsg")) {
+            document.getElementById("messages").getElementsByClassName("profileImgMsg")[k - 1].addEventListener("mouseover", function () {
+                console.log(msgSenderIds[k - 1])
+                openContactCard(msgSenderIds[k - 1]);
+                cancelledOpenContactCard = false;
+            });
+
+            document.getElementById("contact-card-close").addEventListener("click", () => {
+                cancelledOpenContactCard = true;
+                document.getElementById("contact-card").style.opacity = 0;
+            });
         }
     }
     document.getElementById("msg-box").hidden = noMsg;
@@ -308,14 +317,7 @@ function refreshMsgSet() {
 }
 
 function addContactCardListener(k, msgSenderId) {
-    document.getElementById("msgProfileImg" + k).onmouseover = function () {
-        openContactCard(msgSenderId);
-        cancelledOpenContactCard = false;
-    };
-    document.getElementById("contact-card-close").addEventListener("click", () => {
-        cancelledOpenContactCard = true;
-        document.getElementById("contact-card").style.opacity = 0;
-    });
+
 }
 
 function openContactCard(msgSenderId) {
@@ -577,15 +579,15 @@ function showStatusOpt() {
 }
 
 function startMeet(openMeet) {
-    var oldTitle = document.title;
-    document.title = "URGENT! Please open this tab";
+    // var oldTitle = document.title;
+    // document.title = "URGENT! Please open this tab";
     if (openMeet) document.getElementById("meet").click();
     var meetingLink = prompt("Copy link from Google Meet and enter it here");
     if (meetingLink && meetingLink !== "" && meetingLink.slice(0, 24) === "https://meet.google.com/") {
         document.getElementById("msg-box").value =
             "Hello, I am inviting you to join this meeting: <a href='" + meetingLink + "' target='_blank'> Meeting link (" + meetingLink.slice(24, 100) + ")</a>"
             ;
-        document.title = oldTitle;
+        // document.title = oldTitle;
         getNoOfMessages(function (noOfMsg) {
             msgNo = noOfMsg + 1;
             addMessage(document.getElementById("msg-box").value, msgNo);

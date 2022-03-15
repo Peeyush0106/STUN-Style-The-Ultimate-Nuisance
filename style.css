@@ -160,6 +160,7 @@ a .link-text {
 
 #home-btn {
     position: fixed;
+    top: 5%;
     background-color: lightgreen;
 }
 

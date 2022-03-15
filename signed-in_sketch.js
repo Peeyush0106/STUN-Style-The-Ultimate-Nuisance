@@ -84,6 +84,7 @@ function examPlanning() {
             document.getElementById("housie-btn").hidden = true;
             document.getElementById("word-game-btn").hidden = true;
             document.getElementById("my-tasks-btn").hidden = true;
+            document.getElementById("class-chat-btn").hidden = true;
             setTimeout(function () {
                 document.getElementById("body").style.transition = "1s";
                 document.getElementById("body").style.transform = "scale(1.62)";
@@ -111,6 +112,7 @@ function examMarks(onlineReferenceRequired) {
             document.getElementById("housie-btn").hidden = true;
             document.getElementById("word-game-btn").hidden = true;
             document.getElementById("my-tasks-btn").hidden = true;
+            document.getElementById("class-chat-btn").hidden = true;
             if (onlineReferenceRequired) {
                 database.ref("Users/" + auth.currentUser.uid + "/Marks Database/gotStarted").get().then((data) => {
                     if (data.exists() && data.val() == true) {
@@ -226,8 +228,17 @@ function backToHome() {
                 }, 100);
             }
             else if (currentStatus === "marks") {
-                document.getElementById("body").removeChild(document.getElementById("marks-div"));
-                document.getElementById("home-btn").style.top = "10%";
+                setTimeout(function () {
+                    document.getElementById("body").style.transition = ".6s";
+                    document.getElementById("body").style.transform = "scale(0.01)";
+                    setTimeout(function () {
+                        location.reload();
+                        setTimeout(function () {
+                            document.getElementById("body").style.transition = "1s";
+                            document.getElementById("body").style.transform = "scale(1.62)";
+                        }, 500);
+                    }, 600);
+                }, 100);
             }
             currentStatus = "home";
             document.getElementById("exam-planner-btn").hidden = false;
