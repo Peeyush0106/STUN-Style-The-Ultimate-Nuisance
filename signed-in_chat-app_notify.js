@@ -4,18 +4,25 @@ document.addEventListener('DOMContentLoaded', function () {
         alert('Desktop notifications not available in your browser. Try Chromium.'); //if browser is not compatible this will occur
         return;
     }
-
-    if (Notification.permission !== "granted")
-        Notification.requestPermission();
 });
 
-function notifyMe(functionToCall) {
-    if (Notification.permission !== "granted")
+function notifyMe(file, msg, id) {
+    if (Notification.permission !== "granted") {
+        alert("Enable Notifications to keep track of messages in the group");
         Notification.requestPermission();
-    else {
-        var notification = new Notification('STUN: Started Google Meet', {
-            icon: 'https://seeklogo.net/wp-content/uploads/2020/11/google-meet-logo.png',
-            body: "Copy meeting link and from Google Meet and then Switch to STUN to share it.",
-        });
+    }
+    if (id !== auth.currentUser.uid) {
+        if (Notification.permission !== "granted")
+            Notification.requestPermission();
+        else {
+            if (file) body = "New file shared";
+            if (msg) body = msg;
+            getUserProfile(id, function (name, pic) {
+                new Notification('New message by ' + name, {
+                    icon: pic,
+                    body: body,
+                });
+            });
+        }
     }
 }
