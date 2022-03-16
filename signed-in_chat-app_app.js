@@ -311,7 +311,7 @@ function refreshMsgSet() {
 									var msgTxt = msg.msg;
 
 									message = document.createElement("div");
-									p = document.createElement("span");
+									p = document.createElement("p");
 									img = document.createElement("img");
 									timeP = document.createElement("p");
 
@@ -465,6 +465,17 @@ function checkConnection() {
 			connected = snap.val();
 			if (connected) {
 				if (auth.currentUser) {
+					if (Notification.permission !== "granted") {
+						database.ref("Users/" + auth.currentUser.uid + "/userData/alert").get().then((data) => {
+							if (!data.exists() || !data.val()) {
+								alert("Enable Notifications to keep track of messages in the group");
+								database.ref("Users/" + auth.currentUser.uid + "/userData").update({
+									alert: true
+								});
+							}
+						});
+						Notification.requestPermission();
+					}
 					database.ref("Users/" + auth.currentUser.uid + "/userData/profilePicURL").get().then((picData) => {
 						if (picData.exists() && picData.val()) {
 							var pic = picData.val() === "blank" ? "signed-in_chat-app_blank-profile-pic.jpg" : picData.val();
@@ -536,13 +547,13 @@ function checkConnection() {
 								}
 							}
 							document.getElementById("messages").hidden = true;
-							document.getElementById("meet-btn").hidden = true;
-							document.getElementById("list-btn").hidden = true;
+							document.getElementById("meet-btn").style.display = "none";
+							document.getElementById("list-btn").style.display = "none";
 							document.getElementById("messages").innerHTML = "";
-							document.getElementById("msg-box").hidden = true;
-							document.getElementById("send-btn").hidden = true;
+							document.getElementById("msg-box").style.display = "none";
+							document.getElementById("send-btn").style.display = "none";
 							if (document.getElementById("no-msg-info")) document.getElementById("no-msg-info").hidden = true;
-							document.getElementById("imgFileUpload").style.display = "none";
+							document.getElementById("imgFileUpload").style.opacity = 0;
 						}
 					});
 				}
