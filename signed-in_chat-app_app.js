@@ -274,7 +274,6 @@ function refreshMsgSet() {
 									document.getElementById("messages").appendChild(document.createElement("br"));
 
 									document.getElementById(img.id).addEventListener("mouseover", () => {
-										console.log(msgSenderId);
 										openContactCard(msgSenderId);
 										cancelledOpenContactCard = false;
 									});
@@ -324,7 +323,6 @@ function refreshMsgSet() {
 									img.id = "msgProfileImg" + (j - 1);
 
 									p.innerHTML = urlify(msgTxt);
-									console.log(p.innerHTML);
 
 									message.appendChild(img);
 									message.innerHTML += `<div style="font-size: 50%">` + msgSenderName + `</div>`;
@@ -337,7 +335,6 @@ function refreshMsgSet() {
 									document.getElementById("messages").appendChild(document.createElement("br"));
 
 									document.getElementById(img.id).addEventListener("mouseover", () => {
-										console.log(msgSenderId);
 										openContactCard(msgSenderId);
 										cancelledOpenContactCard = false;
 									});
@@ -383,8 +380,6 @@ function refreshMsgSet() {
 
 function openContactCard(msgSenderId) {
 	for (var k = 0; k < msgSenderIds.length; k++) {
-		// var msgSenderId = msgSenderIds[k];
-		console.log(msgSenderId)
 		getUserProfile(msgSenderId, (name, pic, statusMsg, email, status) => {
 			if (document.getElementById("contact-card").style.opacity > 0 || document.getElementById("contact-card-email").innerText != email) {
 				document.getElementById("contact-card").style.opacity = 0;
@@ -392,7 +387,6 @@ function openContactCard(msgSenderId) {
 					document.getElementById("contact-card-name").innerText = name;
 					document.getElementById("contact-card-email").innerText = email;
 					document.getElementById("contact-card-img").src = pic;
-					console.log(status)
 					document.getElementById("contact-card-status-msg").innerHTML = statusMsg ? statusMsg : "<i>No Message</i>";
 					document.getElementById("contact-card-status").innerText = status;
 					if (!cancelledOpenContactCard) {
@@ -482,7 +476,6 @@ function checkConnection() {
 						database.ref("joiners").get().then((joinData) => {
 							for (const i in joinData.val()) {
 								const joiner = joinData.val()[i];
-								console.log(joiner)
 								if (joiner.user.id === auth.currentUser.uid) joinedInList = true;
 							}
 							if (!joinedInList) {
