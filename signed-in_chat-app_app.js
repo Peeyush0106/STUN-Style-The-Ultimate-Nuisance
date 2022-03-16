@@ -43,6 +43,7 @@ document.getElementById("msg-box").hidden = true;
 document.getElementById("send-btn").hidden = true;
 document.getElementById("imgFileUpload").hidden = true;
 document.getElementById("meet-btn").hidden = true;
+document.getElementById("list-btn").hidden = true;
 
 fileUpload = document.getElementById("file-upload");
 filePath = document.getElementById("spnFilePath");
@@ -70,6 +71,7 @@ uploadToDatabaseBtn.onclick = function () {
 	fileAboutToUploadState = false;
 	uploadingFile = false;
 	document.getElementById("meet-btn").hidden = false;
+	document.getElementById("list-btn").hidden = false;
 };
 
 function getNoOfMessages(functionToCall) {
@@ -125,6 +127,7 @@ document.getElementById("cncl-btn").onclick = function () {
 	fileAboutToUploadState = false;
 	document.getElementById("messages").hidden = false;
 	document.getElementById("meet-btn").hidden = false;
+	document.getElementById("list-btn").hidden = false;
 };
 
 auth.onAuthStateChanged(() => {
@@ -145,7 +148,10 @@ auth.onAuthStateChanged(() => {
 						refreshStatus();
 					}
 				}, 50);
-				if (joinedChat) document.getElementById("meet-btn").hidden = false;
+				if (joinedChat) {
+					document.getElementById("meet-btn").hidden = false;
+					document.getElementById("list-btn").hidden = false;
+				};
 			}
 			else {
 				fileUpload.style.display = "none";
@@ -371,6 +377,7 @@ function refreshMsgSet() {
 	var fileUploadDisplay = noMsg ? "none" : "block";
 	document.getElementById("imgFileUpload").style.display = fileUploadDisplay;
 	document.getElementById("meet-btn").hidden = noMsg;
+	document.getElementById("list-btn").hidden = noMsg;
 }
 
 function openContactCard(msgSenderId) {
@@ -450,6 +457,7 @@ fileUpload.onchange = function () {
 			}
 			uploadLocallyBtn.hidden = true;
 			document.getElementById("meet-btn").hidden = true;
+			document.getElementById("list-btn").hidden = true;
 			uploadedImgElts.hidden = false;
 			document.getElementById("messages").hidden = true;
 		}
@@ -537,6 +545,7 @@ function checkConnection() {
 							}
 							document.getElementById("messages").hidden = true;
 							document.getElementById("meet-btn").hidden = true;
+							document.getElementById("list-btn").hidden = true;
 							document.getElementById("messages").innerHTML = "";
 							document.getElementById("msg-box").hidden = true;
 							document.getElementById("send-btn").hidden = true;
@@ -712,4 +721,20 @@ function refreshStatus() {
 			}
 		});
 	}
+}
+
+function showList() {
+	document.getElementById("list-ul").innerHTML = "";
+	document.getElementById("members").hidden = false;
+	database.ref("joiners").get().then((data) => {
+		const joiners = data.val();
+		for (const i in joiners) {
+			const joiner = joiners[i].user;
+			getUserProfile(joiner.id, function (name) {
+				var li = document.createElement("li");
+				li.innerText = name + " (" + joiner.role + ")";
+				document.getElementById("list-ul").appendChild(li);
+			});
+		}
+	});
 }

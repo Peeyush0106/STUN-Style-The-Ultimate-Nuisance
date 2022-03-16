@@ -7,11 +7,11 @@ html, body {
             #00ff00, #00ffff, #0000ff, #ff00ff);
 }
 
-#imgFileUpload, #meet-btn {
+#imgFileUpload, #meet-btn, #list-btn {
     transition: .3s;
 }
 
-#imgFileUpload:hover, #meet-btn:hover {
+#imgFileUpload:hover, #meet-btn:hover, #list-btn:hover {
     transform: scale(1.2);
 }
 
@@ -188,7 +188,13 @@ button:hover, input:hover, img:hover {
     bottom: 0;
 }
 
-#imgFileUpload, #meet-btn {
+#list-btn {
+    position: fixed;
+    margin-left: 30%;
+    bottom: 0;
+}
+
+#imgFileUpload, #meet-btn, #list-btn {
     transition: 1.2s;
     background-color: yellow;
     border: solid blue;
@@ -255,13 +261,13 @@ button:hover, input:hover, img:hover {
     overflow-wrap: break-word;
 }
 
-#contact-card-close:hover {
+#contact-card-close:hover, #list-close:hover {
     transition: 1s;
     background-color: red;
     cursor: pointer;
 }
 
-#contact-card-close {
+#contact-card-close, #list-close {
     zoom: 1.2;
     display: inline-block;
 }
@@ -319,4 +325,16 @@ input[type="radio"] {
 
 input[type="radio"]:checked {
     border: solid 4px;
+}
+
+#members {
+    background-color: #00FFFF;
+    position: fixed;
+    top: 20%;
+    height: 200PX;
+    FLOAT: left;
+    margin-left: 5%;
+    padding-left: 2%;
+    padding-right: 3%;
+    overflow: scroll;
 }

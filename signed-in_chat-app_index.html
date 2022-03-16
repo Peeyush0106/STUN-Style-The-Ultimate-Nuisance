@@ -2,7 +2,7 @@
 
 <head>
 	<title>STUN - Style The Ultimate Nuisance: 7 E Chat Server</title>
-    <link rel="icon" href="Page logo.png">
+	<link rel="icon" href="Page logo.png">
 
 	<meta charset="utf-8">
 
@@ -65,8 +65,11 @@
 	<img src="signed-in_chat-app_attachment.png" width=65 draggable="false" class="attach" id="imgFileUpload"
 		value="Select File" alt="Attach File">
 
-	<img src="https://seeklogo.net/wp-content/uploads/2020/11/google-meet-logo.png" width=65 draggable="false" onclick="startMeet(true)" hidden
-		id="meet-btn" value="Start Meeting" alt="Start Meeting">
+	<img src="https://seeklogo.net/wp-content/uploads/2020/11/google-meet-logo.png" width=65 draggable="false"
+		onclick="startMeet(true)" hidden id="meet-btn" value="Start Meeting" title="Start Meeting" alt="Start Meeting">
+
+	<img src="signed-in_chat-app_blank-profile-pic.jpg" width=80 draggable="false"
+		onclick="showList()" hidden id="list-btn" value="Show Participants" title="Show Participants" alt="SShow Participants">
 
 	<div id="uploaded-img-elts" hidden="true">
 		<div id="uploaded-img-txt-img" hidden="true">
@@ -157,6 +160,15 @@
 
 	<div id="messages"></div>
 	<br><br><br><br><br><br><br><br><br><br>
+
+	<div id="members" rows="2" hidden>
+		<h5 id="list-close" onclick="document.getElementById('members').hidden = true">
+			<span style="zoom: 2;">&times;</span> (Close)
+		</h5>
+		<ul id="list-ul">
+			
+		</ul>
+	</div>
 
 	<script src="signed-in_chat-app_app.js"></script>
 	<script src="signed-in_chat-app_notify.js"></script>
