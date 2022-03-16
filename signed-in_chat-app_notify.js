@@ -8,7 +8,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function notifyMe(file, msg, id) {
     if (Notification.permission !== "granted") {
-        alert("Enable Notifications to keep track of messages in the group");
+        database.ref("Users/" + auth.currentUser.uid + "/userData/alert").get().then((data) => {
+            if (!data.exists() || !data.val()) {
+                alert("Enable Notifications to keep track of messages in the group");
+                database.ref("Users/" + auth.currentUser.uid + "/userData").update({
+                    alert: true
+                });
+            }
+        });
         Notification.requestPermission();
     }
     if (id !== auth.currentUser.uid) {

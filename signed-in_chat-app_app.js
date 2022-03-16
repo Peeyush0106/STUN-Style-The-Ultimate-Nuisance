@@ -215,7 +215,7 @@ function refreshMsgSet() {
 							if (msgSenderName.length > 15) msgSenderName = msgSenderName.slice(0, 15) + " ...";
 
 							if (msg.fileURL && msg.fileName) {
-								if (!firstMsgPlot) notifyMe(true, false, msgSenderId);
+								if (!firstMsgPlot && msgSenderId !== auth.currentUser.uid) notifyMe(true, false, msgSenderId);
 								getNoOfMessages(function () {
 									if (msg.time) {
 										var encodedTime = new Date(msg.time);
@@ -287,7 +287,7 @@ function refreshMsgSet() {
 								});
 							}
 							else if (msg.msg) {
-								if (!firstMsgPlot) notifyMe(false, msg.msg, msgSenderId);
+								if (!firstMsgPlot && msgSenderId !== auth.currentUser.uid) notifyMe(false, msg.msg, msgSenderId);
 								getNoOfMessages(function () {
 									if (msg.time) {
 										var encodedTime = new Date(msg.time);
