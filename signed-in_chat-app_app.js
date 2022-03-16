@@ -699,7 +699,7 @@ function refreshStatus() {
 	if (document.getElementById("status-opt").style.opacity == 0) {
 		database.ref("Users/" + auth.currentUser.uid + "/userData/status").get().then((data) => {
 			if (data.val()) {
-				document.getElementById(data.val()).checked = true;
+				if (document.getElementById(data.val())) document.getElementById(data.val()).checked = true;
 				if (data.val() === "dnd") {
 					document.getElementById("status-change-btn").innerText = "-";
 					document.getElementById("status-change-btn").style.fontSize = "20px";
