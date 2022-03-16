@@ -34,7 +34,7 @@ var statusCodes = {
 	"away": "rgb(255, 208, 0)",
 	"avail": "rgb(0, 255, 0)",
 }
-
+var joinedInList = false;
 var profileListenersAdded = false;
 
 cancelledUpload = false;
@@ -209,17 +209,17 @@ function refreshMsgSet() {
 							if (msgSenderName.length > 15) msgSenderName = msgSenderName.slice(0, 15) + " ...";
 
 							if (msg.fileURL && msg.fileName) {
-								if(!firstMsgPlot)notifyMe(true, false, msgSenderId);
+								if (!firstMsgPlot) notifyMe(true, false, msgSenderId);
 								getNoOfMessages(function () {
 									if (msg.time) {
 										var encodedTime = new Date(msg.time);
 										const months = ["Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-										
+
 										var currentDate = months[new Date().getMonth()] + " " + new Date().getDate() + ", " + new Date().getFullYear();
-										
+
 										yesterdayDate = new Date(new Date().setDate(new Date().getDate() - 1));
 										yesterdayDate = months[yesterdayDate.getMonth()] + " " + yesterdayDate.getDate() + ", " + yesterdayDate.getFullYear()
-										
+
 										decidedDate = months[encodedTime.getMonth()] + " " + encodedTime.getDate() + ", " + encodedTime.getFullYear();
 
 										var hours = encodedTime.getHours().toString().slice(0, 2) == encodedTime.getHours().toString().slice(0, 1) ? "0" + encodedTime.getHours().toString().slice(0, 1) : encodedTime.getHours().toString().slice(0, 2)
@@ -281,17 +281,17 @@ function refreshMsgSet() {
 								});
 							}
 							else if (msg.msg) {
-								if(!firstMsgPlot)notifyMe(false, msg.msg, msgSenderId);
+								if (!firstMsgPlot) notifyMe(false, msg.msg, msgSenderId);
 								getNoOfMessages(function () {
 									if (msg.time) {
 										var encodedTime = new Date(msg.time);
 										const months = ["Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-										
+
 										var currentDate = months[new Date().getMonth()] + " " + new Date().getDate() + ", " + new Date().getFullYear();
-										
+
 										yesterdayDate = new Date(new Date().setDate(new Date().getDate() - 1));
 										yesterdayDate = months[yesterdayDate.getMonth()] + " " + yesterdayDate.getDate() + ", " + yesterdayDate.getFullYear()
-										
+
 										decidedDate = months[encodedTime.getMonth()] + " " + encodedTime.getDate() + ", " + encodedTime.getFullYear();
 
 										var hours = encodedTime.getHours().toString().slice(0, 2) == encodedTime.getHours().toString().slice(0, 1) ? "0" + encodedTime.getHours().toString().slice(0, 1) : encodedTime.getHours().toString().slice(0, 2)
@@ -478,21 +478,28 @@ function checkConnection() {
 							});
 						}
 					});
-					database.ref("joiners").get().then((joinData) => {
-						if (!joinData.exists() || !joinData.val()) {
-							var noOfJoiners = 1;
+					if (!joinedInList) {
+						database.ref("joiners").get().then((joinData) => {
 							for (const i in joinData.val()) {
-								noOfJoiners++;
+								const joiner = joinData.val()[i];
+								console.log(joiner)
+								if (joiner.user.id === auth.currentUser.uid) joinedInList = true;
 							}
-							role = auth.currentUser.uid === "HJRcga7pVSQHoNElCwrZjDogk0G2" ? "admin" : "member"
-							database.ref("joiners/" + noOfJoiners).update({
-								user: {
-									id: auth.currentUser.uid,
-									role: role
+							if (!joinedInList) {
+								var noOfJoiners = 1;
+								for (const i in joinData.val()) {
+									noOfJoiners++;
 								}
-							});
-						}
-					});
+								role = auth.currentUser.uid === "HJRcga7pVSQHoNElCwrZjDogk0G2" ? "admin" : "member"
+								database.ref("joiners/" + noOfJoiners).update({
+									user: {
+										id: auth.currentUser.uid,
+										role: role
+									}
+								});
+							}
+						});
+					}
 					database.ref("Users/" + auth.currentUser.uid + "/userData/email").get().then((emailData) => {
 						if (!emailData.exists() || !emailData.val()) {
 							database.ref("Users/" + auth.currentUser.uid + "/userData").update({
