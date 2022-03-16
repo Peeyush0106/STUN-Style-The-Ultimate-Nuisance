@@ -311,7 +311,7 @@ function refreshMsgSet() {
 									var msgTxt = msg.msg;
 
 									message = document.createElement("div");
-									p = document.createElement("p");
+									p = document.createElement("span");
 									img = document.createElement("img");
 									timeP = document.createElement("p");
 
@@ -323,7 +323,8 @@ function refreshMsgSet() {
 									img.width = 50;
 									img.id = "msgProfileImg" + (j - 1);
 
-									p.innerHTML = msgTxt;
+									p.innerHTML = urlify(msgTxt);
+									console.log(p.innerHTML);
 
 									message.appendChild(img);
 									message.innerHTML += `<div style="font-size: 50%">` + msgSenderName + `</div>`;
@@ -734,4 +735,13 @@ function showList() {
 			});
 		}
 	});
+}
+
+function urlify(text) {
+	var urlRegex = /(((https?:\/\/)|(www\.))[^\s]+)/g;
+	//var urlRegex = /(https?:\/\/[^\s]+)/g;
+	return text.replace(urlRegex, function (url, b, c) {
+		var url2 = (c == 'www.') ? 'http://' + url : url;
+		return '<a href="' + url2 + '" target="_blank">' + url + '</a>';
+	})
 }
