@@ -385,28 +385,19 @@ function openContactCard(msgSenderId) {
 		// var msgSenderId = msgSenderIds[k];
 		console.log(msgSenderId)
 		getUserProfile(msgSenderId, (name, pic, statusMsg, email, status) => {
-			if (document.getElementById("contact-card").style.opacity > 0 && document.getElementById("contact-card-email").innerText != email) {
+			if (document.getElementById("contact-card").style.opacity > 0 || document.getElementById("contact-card-email").innerText != email) {
 				document.getElementById("contact-card").style.opacity = 0;
 				setTimeout(function () {
 					document.getElementById("contact-card-name").innerText = name;
 					document.getElementById("contact-card-email").innerText = email;
 					document.getElementById("contact-card-img").src = pic;
-					document.getElementById("contact-card-status-msg").innerText = statusMsg;
-					document.getElementById("contact-card-status").innerText = status ? status : "<i>No Message</i>";
+					console.log(status)
+					document.getElementById("contact-card-status-msg").innerHTML = statusMsg ? statusMsg : "<i>No Message</i>";
+					document.getElementById("contact-card-status").innerText = status;
 					if (!cancelledOpenContactCard) {
 						document.getElementById("contact-card").style.opacity = 1;
 					}
 				}, 1000);
-			}
-			else {
-				document.getElementById("contact-card-name").innerText = name;
-				document.getElementById("contact-card-email").innerText = email;
-				document.getElementById("contact-card-img").src = pic;
-				document.getElementById("contact-card-status-msg").innerText = statusMsg;
-				document.getElementById("contact-card-status").innerText = status;
-				if (!cancelledOpenContactCard) {
-					document.getElementById("contact-card").style.opacity = 1;
-				}
 			}
 		});
 	}
@@ -604,6 +595,12 @@ function checkConnection() {
 function sendMessage(event) {
 	if (event && event.keyCode === 13 && !event.shiftKey) {
 		event.preventDefault();
+		send();
+	}
+	if (!event) {
+		send();
+	}
+	function send() {
 		if (document.getElementById("msg-box").value !== "") {
 			getNoOfMessages(function (noOfMsg) {
 				msgNo = noOfMsg + 1;

@@ -51,8 +51,8 @@
 	</form>
 
 	<textarea type="text" placeholder="Type your message..." name="Chat message" id="msg-box"
-		onkeypress="sendMessage(event, false)" maxlength="5000"></textarea>
-	<button id="send-btn" onclick="sendMessage(event, true)" title="Send Message">
+		onkeypress="sendMessage(event)" maxlength="5000"></textarea>
+	<button id="send-btn" onclick="sendMessage(false)" title="Send Message">
 		<img src="signed-in_chat-app_send-edited.png" width=55 alt="Send Button Image">
 	</button>
 	<button id="profile-pic-btn" onclick="location.href = 'signed-in_change-profile-pic_index.html'"
