@@ -189,7 +189,7 @@ a .link-text {
     width: 30%;
 }
 
-#add-exam, #add-note, #add-task  {
+#add-exam, #add-note, #add-task {
     position: fixed;
     left: 60%;
 }
@@ -213,7 +213,12 @@ a .link-text {
 }
 
 #exam-marks-statistics {
-    font-size: 20px;
+    font-size: 30px;
+}
+
+#overall-percent {
+    color: lightgreen;
+    background-color: red;
 }
 
 #exam-marks-data {

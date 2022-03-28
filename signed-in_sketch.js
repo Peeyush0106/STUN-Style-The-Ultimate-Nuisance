@@ -9,7 +9,7 @@ Hello !!!
 This is STUN - Style The Ultimate Nuisance.
 
 The full-fledge version of this app includes a lot more features than this one.
-It will also include study related tools like Shared Canvas (for team work with friends), To-do manager (For task management), File Sharers (Sharing study files with a team), etc.
+It will also include study related tools like Shared Canvas (for team work with friends), To-do manager (For task management), etc.
 
 Hope this helps you in your daily-life and lessens your issues !!
 
@@ -285,7 +285,25 @@ function startMarksDatabaseEngine() {
                 `;
 
                 var examUl = document.createElement("ul");
-                database.ref("Users/" + auth.currentUser.uid + "/Marks Database/Exams").get().then((data) => {
+                database.ref("Users/" + auth.currentUser.uid + "/Marks Database/Exams/Private").get().then((data) => {
+                    var allExamsData = data.val();
+                    for (const i in allExamsData) {
+                        const exam = allExamsData[i];
+                        var listObj = document.createElement("li");
+                        listObj.innerHTML = `
+                            <p id="examLiP` + exam.key + `" class="examLiP">
+                                Open ` + exam.name + ` of Grade ` + exam.grade + ` Exam Database
+                            </p>
+                        `;
+                        examUl.appendChild(listObj);
+                        document.getElementById("examLiP" + exam.key).addEventListener("click", () => {
+                            const urlParams = new URLSearchParams(window.location.search);
+                            urlParams.set("examId", exam.key);
+                            window.location.search = urlParams;
+                        });
+                    }
+                });
+                database.ref("Users/" + auth.currentUser.uid + "/Marks Database/Exams/Shared").get().then((data) => {
                     var allExamsData = data.val();
                     for (const i in allExamsData) {
                         const exam = allExamsData[i];
@@ -473,7 +491,7 @@ function submitAddExamForm() {
                 subjects[i + 1].marks = document.getElementById("marks-inpt-" + (i + 1)).value;
                 subjects[i + 1].outof = document.getElementById("outof-inpt-" + (i + 1)).value;
             }
-            var examDataRef = database.ref("Users/" + auth.currentUser.uid + "/Marks Database/Exams").push();
+            var examDataRef = database.ref("Users/" + auth.currentUser.uid + "/Marks Database/Exams/Private").push();
             var examDataKey = examDataRef.key;
 
             var examData = {
@@ -509,63 +527,126 @@ function getUrlParams() {
 }
 
 function openExamData(examId) {
-    console.log("started 1");
-    database.ref("Users/" + auth.currentUser.uid + "/Marks Database/Exams/" + examId).get().then((data) => {
-        if (data.exists()) {
-            document.getElementById("marks-div").hidden = true;
-            console.log("started 2");
-            var examData = data.val();
-            var subjects = examData["subjects"];
-            var tableDiv = document.getElementById("marks-data-table-div");
-            tableDiv.innerHTML = `
+    const opts = ["Private", "Shared"];
+    doesNotExist = 0;
+    shownDatabaseNotExist = false;
+    var dbExists = false;
+    for (var a in opts) {
+        database.ref("Users/" + auth.currentUser.uid + "/Marks Database/Exams/" + opts[a] + "/" + examId).get().then((data) => {
+            if (data.exists()) {
+                dbExists = true;
+                document.getElementById("marks-div").hidden = true;
+                var examData = data.val();
+                var report = examData;
+                var subjects = examData["subjects"];
+                var tableDiv = document.getElementById("marks-data-table-div");
+                tableDiv.innerHTML = `
                 <table id="exam-marks-data-table">
                     <thead id="exam-data-head"></thead>
                     <tbody id="exam-data-body"></tbody>
                 </table>
             `;
 
-            var tableHeaders = ["Subject", "Marks", "Out of", "Percentage"]
-            var tr = document.createElement("tr");
-            document.getElementById("exam-data-head").appendChild(tr);
-            for (const i in tableHeaders) {
-                tr.innerHTML += `
+                var tableHeaders = ["Subject", "Marks", "Out of", "Percentage"]
+                var tr = document.createElement("tr");
+                document.getElementById("exam-data-head").appendChild(tr);
+                for (const i in tableHeaders) {
+                    tr.innerHTML += `
                     <th>` + tableHeaders[i] + `</th>
                 `;
-            }
+                }
 
-            var marksTotal = 0, percentageTotal = 0, totalTotal = 0;
-            for (const i in subjects) {
-                const subject = subjects[i];
-                var tr = document.createElement("tr");
-                percentage = (parseInt(subject.marks) / parseInt(subject.outof)) * 100;
-                tr.innerHTML = `
+                var marksTotal = 0, percentageTotal = 0, totalTotal = 0;
+                for (const i in subjects) {
+                    const subject = subjects[i];
+                    var tr = document.createElement("tr");
+                    percentage = (parseFloat(subject.marks) / parseFloat(subject.outof)) * 100;
+                    tr.innerHTML = `
                     <td>` + subject.subject + `</td>
-                    <td>` + parseInt(subject.marks).toFixed(2) + `</td>
-                    <td>` + parseInt(subject.outof).toFixed(2) + `</td>
-                    <td>` + percentage.toFixed(2) + `%</td>
+                    <td>` + parseFloat(subject.marks) + `</td>
+                    <td>` + parseFloat(subject.outof) + `</td>
+                    <td>` + percentage + `%</td>
                 `;
-                document.getElementById("exam-data-body").appendChild(tr);
-                marksTotal += parseInt(subject.marks);
-                totalTotal += parseInt(subject.outof);
-            }
-            percentageTotal = (marksTotal / totalTotal) * 100
-            var statisticsDiv = document.createElement("div");
-            statisticsDiv.innerHTML = `
-                <p id="exam-marks-statistics">
-                    Total marks: ` + marksTotal.toFixed(2) +
-                `<br> Out of total: ` + totalTotal.toFixed(2) +
-                `<br> Overall Percentage: ` + percentageTotal.toFixed(2) + `%
+                    document.getElementById("exam-data-body").appendChild(tr);
+                    marksTotal += parseFloat(subject.marks);
+                    totalTotal += parseFloat(subject.outof);
+                }
+                percentageTotal = (marksTotal / totalTotal) * 100
+                var statisticsDiv = document.createElement("div");
+                statisticsDiv.innerHTML = `
+                <p>
+                    Total marks: ` + marksTotal + `
+                    <br> Out of total: ` + totalTotal + `
+                    <br>
+                    <span id="overall-percent"> 
+                        Overall Percentage: ` + percentageTotal.toFixed(2) + `%
+                    </span>
                 </p>
             `;
-            document.getElementById("exam-marks-statistics").appendChild(statisticsDiv);
-        }
-        else {
-            var h1 = document.createElement("h1");
-            h1.id = "database-does-not-exist";
-            h1.innerHTML = "This database does not exist, or we are having issues. <br> Please try again later if you are sure if this exists.";
-            document.getElementById("body").appendChild(h1);
-        }
-    });
+                document.getElementById("exam-marks-statistics").appendChild(statisticsDiv);
+
+                var shareReportDiv = document.createElement("div");
+                shareReportDiv.innerHTML = `
+                <button onclick='shareReport(` + JSON.stringify(report) + `)'>
+                    Share my report
+                </button>
+            `;
+                // document.getElementById("share-report-opts").appendChild(shareReportDiv);
+            }
+            if (!dbExists) {
+                showDatabaseNotExist();
+            }
+        });
+    }
+}
+
+function showDatabaseNotExist() {
+    if (document.getElementById("database-does-not-exist")) document.getElementById("database-does-not-exist").parentElement.removeChild(document.getElementById("database-does-not-exist"));
+    var h1 = document.createElement("h1");
+    h1.id = "database-does-not-exist";
+    h1.innerHTML = "This database does not exist, or we are having issues. <br> Please try again later if you are sure if this exists.";
+    document.getElementById("body").appendChild(h1);
+}
+
+function shareReport(report) {
+    if (report) {
+        console.log(report);
+        if (document.getElementById("database-does-not-exist")) document.getElementById("database-does-not-exist").parentElement.removeChild(document.getElementById("database-does-not-exist"));
+        setTimeout(function () {
+            document.getElementById("body").style.transition = ".6s";
+            document.getElementById("body").style.transform = "scale(0.01)";
+            setTimeout(function () {
+                document.getElementById("exam-marks-data").hidden = true;
+                database.ref("joiners").get().then((data) => {
+                    console.log(data.val());
+                    if (data.exists() && data.val()) {
+                        for (const i in data.val()) {
+                            const joiner = data.val()[i].user;
+                            console.log(joiner)
+                            database.ref("Users/" + joiner.id).get().then((nameData) => {
+                                var name;
+                                if (data.exists() && data.val()) {
+                                    name = data.val().userData.name;
+                                }
+                                else {
+                                    data.val().name
+                                }
+                                console.log(name)
+                                joinerName = name;
+                                var li = document.createElement("li");
+                                li.innerText = joinerName;
+                                document.getElementById("to-share-joiners").appendChild(li)
+                            });
+                        }
+                    }
+                });
+                setTimeout(function () {
+                    document.getElementById("body").style.transition = "1s";
+                    document.getElementById("body").style.transform = "scale(1.62)";
+                }, 500);
+            }, 600);
+        }, 100);
+    }
 }
 
 function removeParam(key, sourceURL) {
