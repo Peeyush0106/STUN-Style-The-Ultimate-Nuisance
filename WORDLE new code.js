@@ -1,7 +1,23 @@
 var currentRow = 1;
 var currentNo = 1;
+var appropriateWords = data["solutions"];
+var currentGuess = 0;
+createTable();
+currentRow--;
 const ansWord = getCurrentWordSol();
 var end = false;
+var responses = {
+    rows: {
+        1: "",
+        2: "",
+        3: "",
+        4: "",
+        5: "",
+        6: ""
+    }
+};
+
+var conclusions, unconfirmedLetters, removes;
 
 var letters = [
     [
@@ -40,22 +56,21 @@ var letters = [
 
 window.onload = function () {
     createAlphaTable();
-    document.body.style.zoom = window.innerWidth / 1440;
+    document.body.style.zoom = 0.85 * window.innerWidth / 1440;
 };
 
 window.onresize = function () {
-    document.body.style.zoom = window.innerWidth / 1440;
+    document.body.style.zoom = 0.85 * window.innerWidth / 1440;
 }
 
 setInterval(function () {
-    if (!end) {
+    if (!end && document.getElementById("word-box-" + currentNo)) {
         document.getElementById("word-box-" + currentNo).focus();
     }
 }, 10);
 
 function getCurrentWordSol() {
     var currentWord = data.solutions[Math.floor(Math.random() * data.solutions.length + 1)];
-    createTable();
     document.getElementById("word-box-1").disabled = false;
     document.getElementById("word-box-1").focus();
     return currentWord;
@@ -87,10 +102,24 @@ function createAlphaTable() {
     }
 }
 
-document.getElementById("submit-btn").addEventListener("click", (e) => {
-    e.preventDefault();
+function disableCurrentRow() {
+    for (var i = currentNo - 4; i < currentNo + 1; i++) {
+        document.getElementById("word-box-" + i).disabled = true;
+    }
+}
+
+
+function enableNextWord() {
+    disableCurrentRow();
+    currentRow++;
+    document.getElementById("word-box-" + (currentNo + 1)).disabled = false;
+    document.getElementById("word-box-" + (currentNo + 1)).focus();
+    currentNo++;
+}
+
+function submitWord(word, no) {
     var returnData = checkWordExistance(currentRow);
-    if (returnData === "less-data") {
+	if (returnData === "less-data") {
         alert("Insufficient letters!");
     }
     if (currentNo !== 30) {
@@ -105,7 +134,7 @@ document.getElementById("submit-btn").addEventListener("click", (e) => {
         endGame();
         alert("The word is: " + ansWord);
     }
-});
+};
 
 window.onkeydown = (e) => {
     if (e.keyCode === 13) {
@@ -194,13 +223,13 @@ function checkWordExistance(row) {
     if (!cancel) {
         var wordExists = false;
         for (var i = 0; i < data.herrings.length; i++) {
-            if (word === data.herrings[i]) {
+            if (word.toUpperCase() === data.herrings[i].toUpperCase()) {
                 wordExists = true;
                 break;
             }
         }
         for (var i = 0; i < data.solutions.length; i++) {
-            if (word === data.solutions[i]) {
+            if (word.toUpperCase() === data.solutions[i].toUpperCase()) {
                 wordExists = true;
                 break;
             }
@@ -209,65 +238,96 @@ function checkWordExistance(row) {
     }
 }
 
-function disableCurrentRow() {
-    for (var i = currentNo - 4; i < currentNo + 1; i++) {
-        document.getElementById("word-box-" + i).disabled = true;
-    }
-}
-
-
-function enableNextWord() {
-    disableCurrentRow();
-    currentRow++;
-    document.getElementById("word-box-" + (currentNo + 1)).disabled = false;
-    document.getElementById("word-box-" + (currentNo + 1)).focus();
-    currentNo++;
-}
-
-async function giveWordHints() {
+async function giveWordHints(word, no) {
     var startBoxNo = (5 * currentRow) - 4;
     var noOfCorrectLetters = 0;
     var guess = "";
     for (var i = startBoxNo; i < startBoxNo + 5; i++) {
         guess += document.getElementById("word-box-" + i).value.toLowerCase();
     }
-    for (let i = 0; i < guess.length; i++) {
-        for (var j = 1; j < 31; j++) {
-            document.getElementById("word-box-" + j).disabled = true;
+    var ansWordChars = ansWord.split("");
+    var guessChars = guess.split("");
+    for (let i = 0; i < guessChars.length; i++) {
+        let guessLetter = guessChars[i];
+        let solutionLetter = ansWordChars[i];
+        if (guessLetter === solutionLetter) {
+            document.getElementById("word-box-" + (startBoxNo + i)).style.backgroundColor = "green";
+            document.getElementById("word-box-" + (startBoxNo + i)).style.color = "white";
+
+            conclusions[i + 1] = guessLetter;
+
+            noOfCorrectLetters++;
+
+            ansWordChars[i] = "";
+            guessChars[i] = "";
         }
-        setTimeout(function () {
-            let guessLetter = guess.charAt(i);
-            let solutionLetter = ansWord.charAt(i);
-            for (k = 0; k < guess.length; k++) {
-                let _guessLetter = guess.charAt(i);
-                if (_guessLetter === solutionLetter) {
-                    console.log("")
-                }
-            }
-            if (guessLetter === solutionLetter) {
-                document.getElementById("word-box-" + (startBoxNo + i)).style.backgroundColor = "green";
-                document.getElementById("word-box-" + (startBoxNo + i)).style.color = "white";
+    }
+    
+    for (let i = 0; i < guessChars.length; i++) {
+        let guessLetter = guessChars[i];
+        if (guessLetter === "") {
+            continue;
+        }
 
-                document.getElementById("letter-" + document.getElementById("word-box-" + (startBoxNo + i)).value.toUpperCase()).style.backgroundColor = "green";
-                document.getElementById("letter-" + document.getElementById("word-box-" + (startBoxNo + i)).value.toUpperCase()).style.color = "white";
-
-                noOfCorrectLetters++;
+        for (let j = 0; j < ansWordChars.length; j++) {
+            let solutionLetter = ansWordChars[j];
+            if (solutionLetter === "") {
+                continue;
             }
-            else if (ansWord.indexOf(guessLetter) != -1) {
+
+            if (solutionLetter === guessLetter) {
                 document.getElementById("word-box-" + (startBoxNo + i)).style.backgroundColor = "yellow";
                 document.getElementById("word-box-" + (startBoxNo + i)).style.color = "black";
 
-                document.getElementById("letter-" + document.getElementById("word-box-" + (startBoxNo + i)).value.toUpperCase()).style.backgroundColor = "yellow";
-                document.getElementById("letter-" + document.getElementById("word-box-" + (startBoxNo + i)).value.toUpperCase()).style.color = "black";
+                unconfirmedLetters.push({
+                    no: (startBoxNo + i) - (currentRow - 1) * 5,
+                    letter: guessLetter
+                });
+                ansWordChars[j] = "";
+                guessChars[i] = "";
             }
-            else {
-                document.getElementById("word-box-" + (startBoxNo + i)).style.backgroundColor = "gray";
-                document.getElementById("word-box-" + (startBoxNo + i)).style.color = "white";
-                document.getElementById("letter-" + document.getElementById("word-box-" + (startBoxNo + i)).value.toUpperCase()).style.backgroundColor = "gray";
-                document.getElementById("letter-" + document.getElementById("word-box-" + (startBoxNo + i)).value.toUpperCase()).style.color = "white";
+        }
+    }
+
+    for (let i = 0; i < guessChars.length; i++) {
+        let guessLetter = guessChars[i];
+
+        if (guessLetter === "") {
+            continue;
+        }
+        document.getElementById("word-box-" + (startBoxNo + i)).style.backgroundColor = "gray";
+        document.getElementById("word-box-" + (startBoxNo + i)).style.color = "white";
+
+        for (let j = 0; j < conclusions.length; j++) {
+            var confirmedLetter = conclusions[j];
+            if (confirmedLetter === "") {
+                continue;
             }
-            sleep(500);
-        }, 0);
+            if (guessLetter === confirmedLetter) {
+                guessLetter = "";
+            }
+        }
+
+        if (guessLetter === "") {
+            continue;
+        }
+
+        for (let j = 0; j < unconfirmedLetters.length; j++) {
+            var unConfirmedLetter = unconfirmedLetters[j].letter;
+            if (unConfirmedLetter === "") {
+                continue;
+            }
+            if (guessLetter === unConfirmedLetter) {
+                guessLetter = "";
+            }
+        }
+
+        if (guessLetter === "") {
+            continue;
+        }
+
+        removes.push(guessLetter);
+
     }
     setTimeout(function () {
         if (noOfCorrectLetters === 5) {
@@ -278,6 +338,7 @@ async function giveWordHints() {
             endGame();
         }
         else enableNextWord(noOfCorrectLetters);
+
     }, 3000);
 }
 
@@ -307,7 +368,7 @@ function endGame() {
             idNo++;
         }
     }
-    document.getElementById("submit-btn").parentElement.removeChild(document.getElementById("submit-btn"));
+	document.getElementById("submit-btn").parentElement.removeChild(document.getElementById("submit-btn"));
 }
 
 function sleep(milliseconds) {

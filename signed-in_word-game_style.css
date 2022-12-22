@@ -1,6 +1,13 @@
 html {
     font-family: comic sans ms;
-    background-color: oldlace;
+    zoom: 0.8;
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin-left: 10%;
 }
 
 #container {
@@ -21,8 +28,6 @@ html {
     vertical-align: middle;
     text-transform: uppercase;
     font-weight: bold;
-    background-color: #8585e4;
-    color: white;
 }
 
 .letterTable {

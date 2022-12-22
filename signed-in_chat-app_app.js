@@ -44,6 +44,7 @@ document.getElementById("send-btn").hidden = true;
 document.getElementById("imgFileUpload").hidden = true;
 document.getElementById("meet-btn").hidden = true;
 document.getElementById("list-btn").hidden = true;
+document.getElementById("home-btn-big").hidden = true;
 
 fileUpload = document.getElementById("file-upload");
 filePath = document.getElementById("spnFilePath");
@@ -72,6 +73,7 @@ uploadToDatabaseBtn.onclick = function () {
 	uploadingFile = false;
 	document.getElementById("meet-btn").hidden = false;
 	document.getElementById("list-btn").hidden = false;
+	document.getElementById("home-btn-big").hidden = false;
 };
 
 function getNoOfMessages(functionToCall) {
@@ -128,6 +130,7 @@ document.getElementById("cncl-btn").onclick = function () {
 	document.getElementById("messages").hidden = false;
 	document.getElementById("meet-btn").hidden = false;
 	document.getElementById("list-btn").hidden = false;
+	document.getElementById("home-btn-big").hidden = false;
 };
 
 auth.onAuthStateChanged(() => {
@@ -151,6 +154,7 @@ auth.onAuthStateChanged(() => {
 				if (joinedChat) {
 					document.getElementById("meet-btn").hidden = false;
 					document.getElementById("list-btn").hidden = false;
+					document.getElementById("home-btn-big").hidden = false;
 				};
 			}
 			else {
@@ -376,6 +380,7 @@ function refreshMsgSet() {
 	document.getElementById("imgFileUpload").style.display = fileUploadDisplay;
 	document.getElementById("meet-btn").hidden = noMsg;
 	document.getElementById("list-btn").hidden = noMsg;
+	document.getElementById("home-btn-big").hidden = noMsg;
 }
 
 function openContactCard(msgSenderId) {
@@ -434,7 +439,7 @@ fileUpload.onchange = function () {
 			var fileName = fileUpload.files[i].name.split('\\')[fileUpload.files[i].name.split('\\').length - 1];
 			filePath.innerHTML += i === fileUpload.files.length - 1 ? fileName : fileName + ", ";
 
-			// showing an image if it is an image
+			// showing an image i f it is an image
 			if (fileUpload.files[i].type.slice(0, 5) === "image") {
 				var img = document.createElement("img");
 				img.src = URL.createObjectURL(fileUpload.files[i])
@@ -444,6 +449,7 @@ fileUpload.onchange = function () {
 			uploadLocallyBtn.hidden = true;
 			document.getElementById("meet-btn").hidden = true;
 			document.getElementById("list-btn").hidden = true;
+			document.getElementById("home-btn-big").hidden = true;
 			uploadedImgElts.hidden = false;
 			document.getElementById("messages").hidden = true;
 		}
@@ -531,6 +537,7 @@ function checkConnection() {
 							document.getElementById("messages").hidden = true;
 							document.getElementById("meet-btn").style.display = "none";
 							document.getElementById("list-btn").style.display = "none";
+							document.getElementById("home-btn-big").style.display = "none";
 							document.getElementById("messages").innerHTML = "";
 							document.getElementById("msg-box").style.display = "none";
 							document.getElementById("send-btn").style.display = "none";
@@ -741,6 +748,10 @@ function showList() {
 			});
 		}
 	});
+}
+
+function backToHome() {
+	location.href = "signed-in_index.html";
 }
 
 function urlify(text) {

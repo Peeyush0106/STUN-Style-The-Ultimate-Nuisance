@@ -40,11 +40,11 @@ var letters = [
 
 window.onload = function () {
     createAlphaTable();
-    document.body.style.zoom = window.innerWidth / 1440;
+    document.body.style.zoom = 0.85 * window.innerWidth / 1440;
 };
 
 window.onresize = function () {
-    document.body.style.zoom = window.innerWidth / 1440;
+    document.body.style.zoom = 0.85 * window.innerWidth / 1440;
 }
 
 setInterval(function () {

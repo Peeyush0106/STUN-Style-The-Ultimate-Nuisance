@@ -35,11 +35,12 @@ function createPlanTable() {
 }
 
 function plotPlanData(data) {
-    const months = ["Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    var weekDays = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"];
-    var startDate = months[parseInt(data.startDate.slice(5, 7)) - 1] + " " + data.startDate.slice(8, 10) + ", " + data.startDate.slice(0, 4);
+    var def_startDate = new Date(data.startDate).toString();
+    var def_endDate = new Date(data.endDate).toString();
 
-    var endDate = months[parseInt(data.endDate.slice(5, 7)) - 1] + " " + data.endDate.slice(8, 10) + ", " + data.endDate.slice(0, 4);
+    var startDate = def_startDate.slice(0, 3) + ", " + def_startDate.slice(4, 7) + " " + def_startDate.slice(8, 10) + ", " + def_startDate.slice(11, 15);
+
+    var endDate = def_endDate.slice(0, 3) + ", " + def_endDate.slice(4, 7) + " " + def_endDate.slice(8, 10) + ", " + def_endDate.slice(11, 15);
 
     var bodyOfPlanTable = document.createElement("tr");
     bodyOfPlanTable.innerHTML = `
@@ -62,10 +63,10 @@ function plotPlanData(data) {
         `+ data.daysCount + ` day(s)
     </td>
     <td>
-        `+ weekDays[parseInt(new Date(startDate).getDay())] + ", " + startDate + `
+        ` + startDate + `
     </td>
     <td>
-        `+ weekDays[parseInt(new Date(endDate).getDay())] + ", " + endDate + `
+        ` + endDate + `
     </td>
     `;
     document.getElementById("main-body-of-final-plan-table").appendChild(bodyOfPlanTable);

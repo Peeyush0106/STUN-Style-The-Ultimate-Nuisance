@@ -25,7 +25,6 @@ function checkConnectionEverySecond() {
                     connectionMade = true;
                 }
                 else {
-                    alert("Redirect");
                     location.href = "index.html";
                 }
             }

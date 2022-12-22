@@ -7,11 +7,11 @@ html, body {
             #00ff00, #00ffff, #0000ff, #ff00ff);
 }
 
-#imgFileUpload, #meet-btn, #list-btn {
+#imgFileUpload, #meet-btn, #list-btn, #home-btn-big {
     transition: .3s;
 }
 
-#imgFileUpload:hover, #meet-btn:hover, #list-btn:hover {
+#imgFileUpload:hover, #meet-btn:hover, #list-btn:hover, #home-btn-big:hover {
     transform: scale(1.2);
 }
 
@@ -194,7 +194,13 @@ button:hover, input:hover, img:hover {
     bottom: 0;
 }
 
-#imgFileUpload, #meet-btn, #list-btn {
+#home-btn-big {
+    position: fixed;
+    margin-left: 40%;
+    bottom: 0;
+}
+
+#imgFileUpload, #meet-btn, #list-btn, #home-btn-big {
     transition: 1.2s;
     background-color: yellow;
     border: solid blue;

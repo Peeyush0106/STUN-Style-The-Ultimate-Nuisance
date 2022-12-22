@@ -36,7 +36,6 @@ function checkConnectionEverySecond() {
                 }
             }
             else {
-                alert("Redirect");
                 location.href = "index.html";
             }
         }

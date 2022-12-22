@@ -31,143 +31,148 @@
 </head>
 
 <body>
-	<a href="https://meet.google.com/new" target="_blank" id="meet"></a>
-	<a href="" id="to-scroll-elt"></a>
-	<div id="pin-form" hidden>
-		<h1 style="background-color: yellow; color: green;">
-			Enter chat pin
-		</h1>
-		<input type="text" id="pin-inpt">
-		<input type="submit" id="submit-pin">
-	</div>
-	<link rel="stylesheet" type="text/css" href="signed-in_chat-app_style.css">
-
-	<p id="drop-file-txt"> Drop your file here </p>
-
-	<span id="spnFilePath" style="background-color: yellow; color: black;">
-	</span>
-	<form id="file-upload-form">
-		<input type="file" id="file-upload" style="display: none" multiple />
-	</form>
-
-	<textarea type="text" placeholder="Type your message..." name="Chat message" id="msg-box"
-		onkeypress="sendMessage(event)" maxlength="5000"></textarea>
-	<button id="send-btn" onclick="sendMessage(false)" title="Send Message">
-		<img src="signed-in_chat-app_send-edited.png" width=55 alt="Send Button Image">
-	</button>
-	<button id="profile-pic-btn" onclick="location.href = 'signed-in_change-profile-pic_index.html'"
-		title="Edit Profile" hidden>
-		<img width=55 id="profile-pic" alt="Edit Profile">
-	</button>
-	<button id="status-change-btn" class="status-change-btns" onclick="showStatusOpt()" hidden>
-		|
-	</button>
-	<img src="signed-in_chat-app_attachment.png" width=65 draggable="false" class="attach" id="imgFileUpload"
-		value="Select File" alt="Attach File">
-
-	<img src="https://seeklogo.net/wp-content/uploads/2020/11/google-meet-logo.png" width=65 draggable="false"
-		onclick="startMeet(true)" hidden id="meet-btn" value="Start Meeting" title="Start Meeting" alt="Start Meeting">
-
-	<img src="signed-in_chat-app_blank-profile-pic.jpg" width=80 draggable="false"
-		onclick="showList()" hidden id="list-btn" value="Show Participants" title="Show Participants" alt="SShow Participants">
-
-	<div id="uploaded-img-elts" hidden="true">
-		<div id="uploaded-img-txt-img" hidden="true">
-			<img id="uploaded-img" width="200px" />
+	<div id="body">
+		<a href="https://meet.google.com/new" target="_blank" id="meet"></a>
+		<a href="" id="to-scroll-elt"></a>
+		<div id="pin-form" hidden>
+			<h1 style="background-color: yellow; color: green;">
+				Enter chat pin
+			</h1>
+			<input type="text" id="pin-inpt">
+			<input type="submit" id="submit-pin">
 		</div>
-		<button id="upload-btn">
-			<img src='signed-in_chat-app_upload-btn.png' width="100%" />
-			<p>
-				Share
-			</p>
+		<link rel="stylesheet" type="text/css" href="signed-in_chat-app_style.css">
+	
+		<p id="drop-file-txt"> Drop your file here </p>
+	
+		<span id="spnFilePath" style="background-color: yellow; color: black;">
+		</span>
+		<form id="file-upload-form">
+			<input type="file" id="file-upload" style="display: none" multiple />
+		</form>
+	
+		<textarea type="text" placeholder="Type your message..." name="Chat message" id="msg-box"
+			onkeypress="sendMessage(event)" maxlength="5000"></textarea>
+		<button id="send-btn" onclick="sendMessage(false)" title="Send Message">
+			<img src="signed-in_chat-app_send-edited.png" width=55 alt="Send Button Image">
 		</button>
-
-		<button id="cncl-btn">
-			<img src='signed-in_chat-app_delete.png' width="100%" />
-			<p>
-				Cancel Upload
-			</p>
+		<button id="profile-pic-btn" onclick="location.href = 'signed-in_change-profile-pic_index.html'"
+			title="Edit Profile" hidden>
+			<img width=55 id="profile-pic" alt="Edit Profile">
 		</button>
-	</div>
-
-	<div id="contact-card">
-		<img src="signed-in_change-profile-pic_blank-profile-pic.jpg" id="contact-card-img" width="100">
-		<h3 id="contact-card-status"></h3>
-		<h1 id="contact-card-name">
-			loading..
-		</h1>
-		<h4 id="contact-card-email">
-			loading..
-		</h4>
-		<h5>
-			<span>
-				Status message:
-			</span>
-			<span id="contact-card-status-msg">
+		<button id="status-change-btn" class="status-change-btns" onclick="showStatusOpt()" hidden>
+			-
+		</button>
+		<img src="signed-in_chat-app_attachment.png" width=65 draggable="false" class="attach" id="imgFileUpload"
+			value="Select File" alt="Attach File">
+	
+		<img src="https://seeklogo.net/wp-content/uploads/2020/11/google-meet-logo.png" width=65 draggable="false"
+			onclick="startMeet(true)" hidden id="meet-btn" value="Start Meeting" title="Start Meeting" alt="Start Meeting">
+	
+		<img src="signed-in_chat-app_blank-profile-pic.jpg" width=80 draggable="false" onclick="showList()" hidden
+			id="list-btn" value="Show Participants" title="Show Participants" alt="SShow Participants">
+	
+		<img src="home.png" height=65 draggable="false" onclick="backToHome()" hidden
+			id="home-btn-big" value="Home" title="Home" alt="Home">
+	
+		<div id="uploaded-img-elts" hidden="true">
+			<div id="uploaded-img-txt-img" hidden="true">
+				<img id="uploaded-img" width="200px" />
+			</div>
+			<button id="upload-btn">
+				<img src='signed-in_chat-app_upload-btn.png' width="100%" />
+				<p>
+					Share
+				</p>
+			</button>
+	
+			<button id="cncl-btn">
+				<img src='signed-in_chat-app_delete.png' width="100%" />
+				<p>
+					Cancel Upload
+				</p>
+			</button>
+		</div>
+	
+		<div id="contact-card">
+			<img src="signed-in_change-profile-pic_blank-profile-pic.jpg" id="contact-card-img" width="100">
+			<h3 id="contact-card-status"></h3>
+			<h1 id="contact-card-name">
 				loading..
-			</span>
-		</h5>
-		<h5 id="contact-card-close">
-			<span style="zoom: 2;">&times;</span> (Close)
-		</h5>
-	</div>
-	<div id="status-opt">
-		<table style="text-align: left;">
-			<tbody>
-				<tr>
-					<td>
-						<label for="#busy">Busy</label>
-					</td>
-					<td>
-						<input type="radio" id="busy" name="status-btn" class="status-radio" />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="#dnd">Do Not Disturb</label>
-					</td>
-					<td>
-						<input type="radio" id="dnd" name="status-btn" class="status-radio" />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="#away">Away</label>
-					</td>
-					<td>
-						<input type="radio" id="away" name="status-btn" class="status-radio" />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="#avail">Available</label>
-					</td>
-					<td>
-						<input type="radio" id="avail" name="status-btn" class="status-radio" />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="#off">Offline</label>
-					</td>
-					<td>
-						<input type="radio" id="off" name="status-btn" class="status-radio" />
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-
-	<div id="messages"></div>
-	<br><br><br><br><br><br><br><br><br><br>
-
-	<div id="members" rows="2" hidden>
-		<h5 id="list-close" onclick="document.getElementById('members').hidden = true">
-			<span style="zoom: 2;">&times;</span> (Close)
-		</h5>
-		<ul id="list-ul">
-			
-		</ul>
+			</h1>
+			<h4 id="contact-card-email">
+				loading..
+			</h4>
+			<h5>
+				<span>
+					Status message:
+				</span>
+				<span id="contact-card-status-msg">
+					loading..
+				</span>
+			</h5>
+			<h5 id="contact-card-close">
+				<span style="zoom: 2;">&times;</span> (Close)
+			</h5>
+		</div>
+		<div id="status-opt">
+			<table style="text-align: left;">
+				<tbody>
+					<tr>
+						<td>
+							<label for="#busy">Busy</label>
+						</td>
+						<td>
+							<input type="radio" id="busy" name="status-btn" class="status-radio" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="#dnd">Do Not Disturb</label>
+						</td>
+						<td>
+							<input type="radio" id="dnd" name="status-btn" class="status-radio" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="#away">Away</label>
+						</td>
+						<td>
+							<input type="radio" id="away" name="status-btn" class="status-radio" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="#avail">Available</label>
+						</td>
+						<td>
+							<input type="radio" id="avail" name="status-btn" class="status-radio" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="#off">Offline</label>
+						</td>
+						<td>
+							<input type="radio" id="off" name="status-btn" class="status-radio" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	
+		<div id="messages"></div>
+		<br><br><br><br><br><br><br><br><br><br>
+	
+		<div id="members" rows="2" hidden>
+			<h5 id="list-close" onclick="document.getElementById('members').hidden = true">
+				<span style="zoom: 2;">&times;</span> (Close)
+			</h5>
+			<ul id="list-ul">
+	
+			</ul>
+		</div>
 	</div>
 
 	<script src="signed-in_chat-app_app.js"></script>
